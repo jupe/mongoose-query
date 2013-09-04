@@ -19,7 +19,7 @@ model.find({group: "users"}).select("name").skip(1).limit(5).populate('name')
 ```
 var query = require(mongoose-query);
 
-query(req.query, mymodel).exec(function(error, data){
+query(req.query, mymodel, function(error, data){
   //do what ever...
 });
 ```
