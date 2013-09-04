@@ -1,5 +1,5 @@
 {
-  "name": "Query",
+  "name": "mongoose-query",
   "description": "mongoose Query lib",
   "keywords": ["mongoose", "query", "mongodb"],
   "version": "0.1.0",
