@@ -19,6 +19,7 @@
       }
     ],
   "dependencies": {
+    "mongoose": "*"
   },
   "devDependencies": {
       "mocha": "*",
