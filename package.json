@@ -5,7 +5,7 @@
   "version": "0.1.0",
   "homepage": "https://github.com/jupe/mongoose-query",
   "author": "Jussi Vatjus-Anttila <jussiva@gmail.com>)",
-  "main": "lib/query",
+  "main": "lib/index",
   "bugs" : {
     "url" : "https://github.com/jupe/mongoose-query/issues"
   },
