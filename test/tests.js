@@ -109,7 +109,8 @@ describe('Query:basic', function() {
   it('count', function(done) {
     Query({q:'{"$or": [ {"msg":"i#1"}, {"msg":"i#2"}]}', t:'count'}, model, function(error, data){
       assert.equal( error, undefined );
-      assert.equal( data, 2 );
+      assert.typeOf( data, 'object' );
+      assert.equal( data.count, 2 );
       done();
     });
   });
