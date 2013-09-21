@@ -29,7 +29,7 @@ query(req.query, mymodel, function(error, data){
 ```
 http://www.myserver.com/query?[q=<query>][&t=<type>][&f=<fields>][&s=<order>][&sk=<skip>][&l=<limit>][&p=<populate>]
 
-[q=<query>][&t=<type>][&f=<fields>][&s=<order>][&sk=<skip>][&l=<limit>][&p=<populate>]
+[q=<query>][&t=<type>][&f=<fields>][&s=<order>][&sk=<skip>][&l=<limit>][&p=<populate>][&fl=<boolean>]
 
 q=<query> - restrict results by the specified JSON query
 t=<type> - find|findOne|count|aggregate|distinct..
@@ -41,6 +41,28 @@ sk=<num results to skip> - specify the number of results to skip in the result s
                             useful for paging
 l=<limit> - specify the limit for the number of results (default is 1000)
 p=<populate> - specify the fields for populate
+fl=<boolean> - Flat results or not
+
+
+Results:
+
+fl=false 
+[
+ { 
+ 	nest: {
+ 		ed: {
+ 			data: 'value',
+        	data2':'value'
+    	}
+  	}
+}
+]
+
+fl=true
+[
+ {'nest.ed.data': 'value',
+  'nest.ed.data2':'value'},
+]
 ```
 
 

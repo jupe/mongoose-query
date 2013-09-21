@@ -16,6 +16,9 @@ var TestSchema = new mongoose.Schema({
   , msg    : { type: String, lowercase: true, trim: true }
   , date   : {type: Date, default: Date.now}
   , orig   : {type: ObjectId, ref: 'originals' }
+  , nest   : {
+    ed: {type: String, default: 'value'}
+  }
 });
 var origModel = mongoose.model('originals', OrigSchema);
 var model = mongoose.model('test', TestSchema);
@@ -120,6 +123,17 @@ describe('Query:basic', function() {
       assert.equal( error, undefined );
       assert.equal( data.length, 2 );
       
+      done();
+    });
+  });
+  it('flatten', function(done) {
+    Query({q:'{}', fl: 'true', l:'1'}, model, function(error, data){
+      assert.equal(error, undefined);
+      assert.typeOf(data, 'array');
+      data.forEach( function(item){
+        assert.typeOf(item, 'object');
+        assert.equal(item['nest.ed'], 'value')
+      });
       done();
     });
   });

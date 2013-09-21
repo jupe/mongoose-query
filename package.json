@@ -19,7 +19,8 @@
       }
     ],
   "dependencies": {
-    "mongoose": "*"
+    "mongoose": "*",
+    "flat": "*"
   },
   "devDependencies": {
       "mocha": "*",
