@@ -19,7 +19,7 @@
       }
     ],
   "dependencies": {
-    "mongoose": "*",
+    "mongoose": ">=3.8.1",
     "flat": "*"
   },
   "devDependencies": {
