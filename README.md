@@ -43,6 +43,17 @@ l=<limit> - specify the limit for the number of results (default is 1000)
 p=<populate> - specify the fields for populate
 fl=<boolean> - Flat results or not
 
+  
+alternative search conditions:
+"key={in}a,b"       "At least one of these is in array"
+"key={nin}a,b"      "Any of these values is not in array"
+"key={all}a,b"      "All of these contains in array"
+"key={empty}-"      "Field is empty or not exists"
+"key={mod}a,b"      "Docs where key mod a is b"
+"key={gt}a"         "Docs key is greater than a"
+"key={lt}a"         "Docs key is lower than a"
+"key=a|b|c"         "Docs where type of key is Array and contains at least one of given value
+
 
 Results:
 
