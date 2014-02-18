@@ -4,6 +4,7 @@ var fs = require('fs')
   , mongoose = require('mongoose')
   , Schema = mongoose.Schema
   , assert = require('chai').assert
+/* QueryPlugin itself */  
   , Query = require('../');
   
 var ObjectId = Schema.ObjectId;
@@ -20,8 +21,10 @@ var TestSchema = new mongoose.Schema({
     ed: {type: String, default: 'value'}
   }
 });
+TestSchema.plugin(Query);
 var origModel = mongoose.model('originals', OrigSchema);
 var model = mongoose.model('test', TestSchema);
+
 
 mongoose.connect(  "mongodb://localhost/Query-test", {} ); 
 var _id = '123123';
@@ -54,15 +57,23 @@ describe('Query:basic', function() {
   });
   
   it('all', function(done) {
-    Query({q:'{}'}, model, function(error, data){
+    model.Query({q:'{}'}, function(error, data){
       assert.equal( error, undefined );
       assert.equal( data.length, 20 );
       assert.isTrue( (data[0].orig+'').match(/([0-9a-z]{24})/) != null );
       done();
     });
   });
+  it('regex', function(done) {
+    model.Query({q:'{"title": {"$regex": "/^testa/"}}'}, function(error, data){
+      assert.equal( error, undefined );
+      assert.equal( data.length, 10 );
+      assert.isTrue( (data[0].orig+'').match(/([0-9a-z]{24})/) != null );
+      done();
+    });
+  });
   it('findOne & sort', function(done) {
-    Query({q:'{}', t: 'findOne', s: '{"msg": 1}'}, model, function(error, data){
+    model.Query({q:'{}', t: 'findOne', s: '{"msg": 1}'}, function(error, data){
       assert.equal( error, undefined );
       assert.typeOf( data, 'Object' );
       assert.equal( data.title, 'testa' );
@@ -71,7 +82,7 @@ describe('Query:basic', function() {
     });
   });
   it('exact', function(done) {
-    Query({q:'{"msg":"i#3"}'}, model, function(error, data){
+    model.Query({q:'{"msg":"i#3"}'}, function(error, data){
       assert.equal( error, undefined );
       assert.equal( data.length, 1 );
       assert.equal( data[0].msg, "i#3" );
@@ -79,7 +90,7 @@ describe('Query:basic', function() {
     });
   });
   it('populate', function(done) {
-    Query({q:'{"msg":"i#3"}', p: 'orig'}, model, function(error, data){
+    model.Query({q:'{"msg":"i#3"}', p: 'orig'}, function(error, data){
       assert.equal( error, undefined );
       assert.equal( data.length, 1 );
       assert.equal( data[0].msg, "i#3" );
@@ -88,7 +99,7 @@ describe('Query:basic', function() {
     });
   });
   it('limit & select', function(done) {
-    Query({q:'{}', f: 'title', l:'3', s: '{"title": -1}'}, model, function(error, data){
+    model.Query({q:'{}', f: 'title', l:'3', s: '{"title": -1}'}, function(error, data){
       assert.equal( error, undefined );
       assert.equal( data.length, 3 );
       assert.equal( data[0].msg, undefined );
@@ -102,7 +113,7 @@ describe('Query:basic', function() {
   });
   
   it('skip', function(done) {
-    Query({q:'{}', sk:'3'}, model, function(error, data){
+    model.Query({q:'{}', sk:'3'}, function(error, data){
       assert.equal( error, undefined );
       assert.equal( data.length, 17 );
       done();
@@ -110,7 +121,7 @@ describe('Query:basic', function() {
   });
   
   it('count', function(done) {
-    Query({q:'{"$or": [ {"msg":"i#1"}, {"msg":"i#2"}]}', t:'count'}, model, function(error, data){
+    model.Query({q:'{"$or": [ {"msg":"i#1"}, {"msg":"i#2"}]}', t:'count'}, function(error, data){
       assert.equal( error, undefined );
       assert.typeOf( data, 'object' );
       assert.equal( data.count, 2 );
@@ -119,7 +130,7 @@ describe('Query:basic', function() {
   });
   
   it('distinct', function(done) {
-    Query({f:'title', t:'distinct'}, model, function(error, data){
+    model.Query({f:'title', t:'distinct'}, function(error, data){
       assert.equal( error, undefined );
       assert.equal( data.length, 2 );
       
@@ -127,7 +138,7 @@ describe('Query:basic', function() {
     });
   });
   it('flatten', function(done) {
-    Query({q:'{}', fl: 'true', l:'1'}, model, function(error, data){
+    model.Query({q:'{}', fl: 'true', l:'1'}, function(error, data){
       assert.equal(error, undefined);
       assert.typeOf(data, 'array');
       data.forEach( function(item){

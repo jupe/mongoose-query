@@ -3,25 +3,41 @@ mongoose-query
 
 mongoose query creator. Alternative for mongoose-api-query but without schema understanding.
 This very simple library can be used for example expressjs+mongoose applications to help 
-construct mongoose query model.
+construct mongoose query model directly from url parameters.
 
 [![Build Status](https://travis-ci.org/jupe/mongoose-query.png?branch=master)](https://travis-ci.org/jupe/mongoose-query)
 
+## Installation
+
+Use npm:
+```
+npm install mongoose-query
+```
+
 ## Usage Example
 
-"q={"group":"users"}&f=name&sk=1&l=5&p=name"
--->
-model.find({group: "users"}).select("name").skip(1).limit(5).populate('name')
+```
+var QueryPlugin = require(mongoose-query);
+var TestSchema = new mongoose.Schema({});
+TestSchema.plugin(QueryPlugin);
+var testmodel = mongoose.model('test', TestSchema);
 
+//express route
+module.exports = function query(req, res) {
+  testmodel.query(req.query, function(error, data){
+    res.json(error?{error: error}:data);
+  });
+}
+```
 
-## Code Example
+## Query string example
 
 ```
-var query = require(mongoose-query);
+http://localhost/query.json?q={"group":"users"}&f=name&sk=1&l=5&p=name
 
-query(req.query, mymodel, function(error, data){
-  //do what ever...
-});
+Converted to:
+
+model.find({group: "users"}).select("name").skip(1).limit(5).populate('name')
 ```
 
 ## doc
