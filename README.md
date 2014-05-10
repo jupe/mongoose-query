@@ -7,6 +7,12 @@ construct mongoose query model directly from url parameters.
 
 [![Build Status](https://travis-ci.org/jupe/mongoose-query.png?branch=master)](https://travis-ci.org/jupe/mongoose-query)
 
+## History
+
+||versio||Changes||
+|0.0.2|Support for complex populate query|
+|0.0.1|-|
+
 ## Installation
 
 Use npm:
@@ -58,7 +64,7 @@ s=<sort order> - specify the order in which to sort each specified field
 sk=<num results to skip> - specify the number of results to skip in the result set; 
                             useful for paging
 l=<limit> - specify the limit for the number of results (default is 1000)
-p=<populate> - specify the fields for populate
+p=<populate> - specify the fields for populate, also more complex json object is supported.
 fl=<boolean> - Flat results or not
 
   
