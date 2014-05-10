@@ -9,9 +9,10 @@ construct mongoose query model directly from url parameters.
 
 ## History
 
-||versio||Changes||
-|0.0.2|Support for complex populate query|
-|0.0.1|-|
+|versio|Changes|
+|------|-------|
+|0.1.6|Support for complex populate query|
+|0.1.5|-|
 
 ## Installation
 
