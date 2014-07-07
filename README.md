@@ -66,7 +66,7 @@ l=<limit>                   specify the limit for the number of results (default
 p=<populate>                specify the fields for populate, also more complex json object is supported.
 map=<mapFunction>           mongodb map function as string
                             http://docs.mongodb.org/manual/reference/command/mapReduce/#mapreduce-map-cmd'
-                            e.g. "function(){if (this.status == 'A') emit(this.cust_id, 1);)}""
+                            e.g. "function(){if (this.status == 'A') emit(this.cust_id, 1);)}"
 reduce=<reduceFunction>     mongodb reduce function as string
                             http://docs.mongodb.org/manual/reference/command/mapReduce/#mapreduce-reduce-cmd
                             e.g. "function(key, values) {return result;}"
