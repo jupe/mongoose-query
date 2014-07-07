@@ -16,6 +16,7 @@ var TestSchema = new mongoose.Schema({
     title  : { type: String, index: true }
   , msg    : { type: String, lowercase: true, trim: true }
   , date   : {type: Date, default: Date.now}
+  , empty  : {type: String}
   , orig   : {type: ObjectId, ref: 'originals' }
   , nest   : {
     ed: {type: String, default: 'value'}
@@ -148,4 +149,28 @@ describe('Query:basic', function() {
       done();
     });
   });
+  it('!empty', function(done){
+    //Field exists and is not empty 
+    model.Query({'nest.ed': '{!empty}-'}, function(error, data){
+      assert.equal(error, undefined);
+      assert.equal(data[0].nest.ed, 'value');
+      done();
+    })
+  });
+  it('!empty', function(done){
+    //Field exists and is not empty 
+    model.Query({'empty': '{!empty}-'}, function(error, data){
+      assert.equal(error, undefined);
+      assert.equal(data.length, 0);
+      done();
+    })
+  });
+  it('empty', function(done){
+    //Field is empty or not exists
+    model.Query({'empty': '{empty}-'}, function(error, data){
+      assert.equal(error, undefined);
+      assert.equal(data.length, 20);
+      done();
+    })
+  })
 });

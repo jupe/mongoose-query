@@ -11,6 +11,7 @@ construct mongoose query model directly from url parameters.
 
 |versio|Changes|
 |------|-------|
+|0.1.7|typo on mapReduce case, !empty keyword added|
 |0.1.6|Support for complex populate query and mapReduce improvements|
 |0.1.5|-|
 
