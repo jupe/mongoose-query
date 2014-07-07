@@ -17,7 +17,7 @@ construct mongoose query model directly from url parameters.
 
 ## Installation
 
-Use npm:
+Use [npm](https://www.npmjs.org/package/mongoose-query):
 ```
 npm install mongoose-query
 ```
