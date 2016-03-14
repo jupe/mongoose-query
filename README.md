@@ -1,11 +1,13 @@
-mongoose-query
+mongoose-query [![Build Status](https://travis-ci.org/jupe/mongoose-query.png?branch=master)](https://travis-ci.org/jupe/mongoose-query)
 ==============
+
+[![NPM](https://nodei.co/npm/mongoose-query.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/mongoose-query/)
+
+[![NPM](https://nodei.co/npm-dl/mongoose-query.png)](https://nodei.co/npm/mongoose-query/)
 
 mongoose query creator. Alternative for mongoose-api-query but without schema understanding.
 This very simple library can be used for example expressjs+mongoose applications to help 
 construct mongoose query model directly from url parameters.
-
-[![Build Status](https://travis-ci.org/jupe/mongoose-query.png?branch=master)](https://travis-ci.org/jupe/mongoose-query)
 
 ## History
 
