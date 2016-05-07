@@ -21,7 +21,7 @@
   "dependencies": {
     "mongoose": ">=3.8.1",
     "flat": "*",
-    "underscore": "*"
+    "lodash": "*"
   },
   "devDependencies": {
       "mocha": "*",
