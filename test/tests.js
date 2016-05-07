@@ -248,6 +248,7 @@ describe('Query:basic', function() {
   });
   it('limit with sort', function(done){
     //Field is empty or not exists
+    mongoose.set('debug', true)
     var req = {'l': '2000', 's': '{ "i": -1 }'};
     model.Query(req, function(error, data){
       assert.equal(error, undefined);
