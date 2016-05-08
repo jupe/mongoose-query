@@ -13,6 +13,7 @@ construct mongoose query model directly from url parameters.
 
 |versio|Changes|
 |------|-------|
+|0.2.0|replace underscore with lodash, possible to return promise when no callback in use|
 |0.1.7|typo on mapReduce case, !empty keyword added|
 |0.1.6|Support for complex populate query and mapReduce improvements|
 |0.1.5|-|
@@ -49,6 +50,9 @@ Converted to:
 
 model.find({group: "users"}).select("name").skip(1).limit(5).populate('name')
 ```
+
+**note:** Seems that sorting with limit doesn't work with mongodb 2.4.x without related indexes. Mongodb 2.6.x seems to work.
+
 
 ## doc
 
