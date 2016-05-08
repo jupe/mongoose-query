@@ -51,6 +51,9 @@ Converted to:
 model.find({group: "users"}).select("name").skip(1).limit(5).populate('name')
 ```
 
+**note:** Seems that sorting with limit doesn't work with mongodb 2.4.x without related indexes. Mongodb 2.6.x seems to work.
+
+
 ## doc
 
 ```
