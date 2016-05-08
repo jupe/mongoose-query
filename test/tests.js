@@ -18,7 +18,7 @@ var TestSchema = new mongoose.Schema({
   , date   : {type: Date, default: Date.now}
   , empty  : {type: String}
   , orig   : {type: ObjectId, ref: 'originals' }
-  , i      : {type: Number }
+  , i      : {type: Number, index: true }
   , nest   : {
     ed: {type: String, default: 'value'}
   }
