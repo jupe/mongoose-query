@@ -19,7 +19,7 @@
       }
     ],
   "dependencies": {
-    "mongoose": ">=3.8.1",
+    "mongoose": "3.8.1",
     "flat": "*",
     "lodash": "*"
   },
