@@ -37,13 +37,18 @@ describe('Query:basic', function() {
     this.timeout(10000);
     
     var create = function(i, max, callback){
-      if( i<max){
+      if( i<max -1){
         var obj = new model({title: (i%2===0?'testa':'testb'), msg: 'i#'+i, orig: _id, i: i});
         obj.save( function(error, doc){
           create(i+1, max, callback);
         });
-      } else {
-        callback();
+      }
+      else {
+        var obj = new model({_id: "57ae125aaf1b792c1768982b", title: (i%2===0?'testa':'testb'), msg: 'i#'+i, orig: _id, i: i});
+        obj.save( function(error, doc){
+          callback();
+        });
+
       }
     }
     mongoose.connection.on('connected', function(){
@@ -252,6 +257,18 @@ describe('Query:basic', function() {
     model.Query(req, function(error, data){
       assert.equal(error, undefined);
       assert.equal(data.length, 2000);
+      //alternative
+      assert.instanceOf(model.Query(req), mongoose.Promise);
+      done();
+    });
+  });
+  it('oid wildcard', function(done) {
+    var req = {q:'{"_id": "oid:57ae125aaf1b792c1768982b"}'};
+    model.Query(req, function(error, data){
+      assert.equal( error, undefined );
+      assert.equal( data.length, 1);
+      assert.equal( data[0]._id, "57ae125aaf1b792c1768982b" );
+
       //alternative
       assert.instanceOf(model.Query(req), mongoose.Promise);
       done();
