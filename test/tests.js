@@ -266,6 +266,7 @@ describe('Query:basic', function() {
     var req = {q:'{"_id": "oid:57ae125aaf1b792c1768982b"}'};
     model.Query(req, function(error, data){
       assert.equal( error, undefined );
+      assert.equal( data.length, 1);
       assert.equal( data[0]._id, "57ae125aaf1b792c1768982b" );
 
       //alternative
