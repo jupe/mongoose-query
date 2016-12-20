@@ -2,7 +2,7 @@
   "name": "mongoose-query",
   "description": "mongoose Query lib",
   "keywords": ["mongoose", "query", "mongodb"],
-  "version": "0.2.0",
+  "version": "0.2.1",
   "homepage": "https://github.com/jupe/mongoose-query",
   "author": "Jussi Vatjus-Anttila <jussiva@gmail.com>)",
   "main": "lib/index",
@@ -13,11 +13,7 @@
         "type": "git",
         "url": "https://github.com/jupe/mongoose-query"
   },
-  "licenses" : [
-      { "type" : "MIT"
-      , "url" : "https://github.com/jupe/mongoose-query/blob/master/LICENSE"
-      }
-    ],
+  "licenses" : "MIT",
   "dependencies": {
     "mongoose": "3.8.1",
     "flat": "*",
