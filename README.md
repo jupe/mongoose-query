@@ -78,6 +78,10 @@ reduce=<reduceFunction>     mongodb reduce function as string
                             e.g. "function(key, values) {return result;}"
 fl=<boolean>                Flat results or not
 
+Special values:
+"oid:<string>"              string is converted to ObjectId
+{ $regex: /<string>/,       regex match with optional regex options
+ ($options: "") }        
   
 Alternative search conditions:
 "key={in}a,b"               At least one of these is in array
@@ -89,7 +93,6 @@ Alternative search conditions:
 "key={gt}a"                 Docs key is greater than a
 "key={lt}a"                 Docs key is lower than a
 "key=a|b|c"                 Docs where type of key is Array and contains at least one of given value
-
 
 Results:
 
