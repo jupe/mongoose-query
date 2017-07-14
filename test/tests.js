@@ -462,4 +462,13 @@ describe('Query:basic', function() {
       promise.then(validateData).then(done);
     });
   });
+  it('number search', function (done) {
+    const req = {i: 1};
+    TestModel.leanQuery(req, function(error, data) {
+      assert.equal( error, undefined );
+      assert.equal( data.length, 1);
+      assert.equal( data[0].i, 1);
+      done();
+    });
+  })
 });
