@@ -15,7 +15,7 @@
   },
   "licenses" : "MIT",
   "dependencies": {
-    "mongoose": "3.8.1",
+    "mongoose": "^4.11.4",
     "flat": "*",
     "lodash": "*"
   },
