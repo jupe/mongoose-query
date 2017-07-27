@@ -6,7 +6,7 @@ mongoose-query [![Build Status](https://travis-ci.org/jupe/mongoose-query.png?br
 [![NPM](https://nodei.co/npm-dl/mongoose-query.png)](https://nodei.co/npm/mongoose-query/)
 
 mongoose query creator. Alternative for mongoose-api-query but without schema understanding.
-This very simple library can be used for example expressjs+mongoose applications to help 
+This very simple library can be used for example expressjs+mongoose applications to help
 construct mongoose query model directly from url parameters.
 
 ## History
@@ -63,11 +63,11 @@ http://www.myserver.com/query?[q=<query>][&t=<type>][&f=<fields>][&s=<order>][&s
 q=<query>                   restrict results by the specified JSON query
                             regex e.g. q='{"field":{"$regex":"/mygrep/", "$options":"i"}}'
 t=<type>                    find|findOne|count|aggregate|distinct|aggregate|mapReduce
-f=<set of fields>           specify the set of fields to include or exclude in each document 
+f=<set of fields>           specify the set of fields to include or exclude in each document
                             (1 - include; 0 - exclude)
-s=<sort order>              specify the order in which to sort each specified field 
+s=<sort order>              specify the order in which to sort each specified field
                             (1- ascending; -1 - descending), JSON
-sk=<num results to skip>    specify the number of results to skip in the result set; 
+sk=<num results to skip>    specify the number of results to skip in the result set;
                             useful for paging
 l=<limit>                   specify the limit for the number of results (default is 1000)
 p=<populate>                specify the fields for populate, also more complex json object is supported.
@@ -83,7 +83,7 @@ Special values:
 "oid:<string>"              string is converted to ObjectId
 { $regex: /<string>/,       regex match with optional regex options
  ($options: "") }        
-  
+
 Alternative search conditions:
 "key={in}a,b"               At least one of these is in array
 "key={nin}a,b"              Any of these values is not in array
@@ -97,9 +97,9 @@ Alternative search conditions:
 
 Results:
 
-fl=false 
+fl=false
 [
- { 
+ {
  	nest: {
  		ed: {
  			data: 'value',
@@ -115,7 +115,3 @@ fl=true
   'nest.ed.data2':'value'},
 ]
 ```
-
-
-
-
