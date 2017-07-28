@@ -5,8 +5,15 @@ mongoose-query [![Build Status](https://travis-ci.org/jupe/mongoose-query.png?br
 
 [![NPM](https://nodei.co/npm-dl/mongoose-query.png)](https://nodei.co/npm/mongoose-query/)
 
-mongoose query creator.
-This library is usefull example with `expressjs` + `mongoose` applications to help construct mongoose query model directly from url parameters.
+This library is usefull example with `expressjs` + `mongoose` applications to help construct mongoose query model directly from url parameters. Example:
+
+```
+http://localhost/model?q={"group":"users"}&f=name&sk=1&l=5&p=name
+```
+Converted to:
+```
+model.find({group: "users"}).select("name").skip(1).limit(5).populate('name')
+```
 
 ## Changes log
 
@@ -41,17 +48,6 @@ module.exports = function query(req, res) {
   });
 }
 ```
-
-## Query string example
-
-```
-http://localhost/model?q={"group":"users"}&f=name&sk=1&l=5&p=name
-
-Converted to:
-
-model.find({group: "users"}).select("name").skip(1).limit(5).populate('name')
-```
-
 
 ## doc
 
