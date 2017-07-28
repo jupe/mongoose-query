@@ -58,6 +58,11 @@ model.find({group: "users"}).select("name").skip(1).limit(5).populate('name')
 ## doc
 
 ```
+Model.query()
+Model.leanQuery() - gives plain objects ([lean](http://mongoosejs.com/docs/api.html#query_Query-lean))
+``
+
+```
 http://www.myserver.com/query?[q=<query>][&t=<type>][&f=<fields>][&s=<order>][&sk=<skip>][&l=<limit>][&p=<populate>][&fl=<boolean>][&map=<mapFunction>][&reduce=<reduceFunction>]
 
 q=<query>                   restrict results by the specified JSON query
@@ -88,8 +93,8 @@ Alternative search conditions:
 "key={in}a,b"               At least one of these is in array
 "key={nin}a,b"              Any of these values is not in array
 "key={all}a,b"              All of these contains in array
-"key={empty}-"              Field is empty or not exists
-"key={!empty}-"             Field exists and is not empty
+"key={empty}"               Field is empty or not exists
+"key={!empty}"              Field exists and is not empty
 "key={mod}a,b"              Docs where key mod a is b
 "key={gt}a"                 Docs key is greater than a
 "key={lt}a"                 Docs key is lower than a

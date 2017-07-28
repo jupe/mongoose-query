@@ -1,6 +1,7 @@
 /* Node.js official modules */
 const fs = require('fs')
 /* 3rd party modules */
+  , _ = require('lodash')
   , mongoose = require('mongoose')
   , Schema = mongoose.Schema
   , type = require('type-detect')
@@ -8,7 +9,8 @@ const fs = require('fs')
   , assert = chai.assert
   , expect = chai.expect
 /* QueryPlugin itself */
-  , Query = require('../');
+  , Query = require('../')
+  , parseQuery = require('../lib/parseQuery');
 
 mongoose.Promise = Promise;
 
@@ -35,11 +37,12 @@ let TestSchema = new mongoose.Schema({
   }
 });
 TestSchema.plugin(Query);
+
 const OrigTestModel = mongoose.model('originals', OrigSchema);
 const TestModel = mongoose.model('test', TestSchema);
 const docCount = 4000;
 const defaultLimit = 1000;
-let _id = '123123';
+let _id;
 
 let create = (i, max, callback) => {
   if( i<max -1){
@@ -68,15 +71,58 @@ describe('Query:basic', function() {
   before( function(done) {
     this.timeout(10000);
     let obj = new OrigTestModel();
-    obj.save( function(error, doc){
+    obj.save((error, doc) => {
        _id = doc._id;
-       TestModel.remove({}, function(){
+       TestModel.remove({}, () => {
         create(0, docCount, done);
       });
     });
   })
+  it('parseQuery', function() {
+    let defaultResp = {
+      q: {},
+      map: "",
+      reduce: "",
+      t: "find",
+      f: false,
+      s: false,
+      sk: false,
+      l: 1000,
+      p: false,
+      fl: false
+    };
+     assert.deepEqual(parseQuery({q: '{"a": "b"}'}),
+                     _.defaults({q: {a: 'b'}}, defaultResp));
+     assert.deepEqual(parseQuery({t: 'count'}),
+                     _.defaults({t: 'count'}, defaultResp));
+     assert.deepEqual(parseQuery({p: 'a'}),
+                     _.defaults({p: 'a'}, defaultResp));
+     assert.deepEqual(parseQuery({p: '["a","b"]'}),
+                     _.defaults({p: ['a','b']}, defaultResp));
+     assert.deepEqual(parseQuery({p: '{"a":"b"}'}),
+                     _.defaults({p: {a:"b"}}, defaultResp));
+     assert.deepEqual(parseQuery({p: 'a,b'}),
+                     _.defaults({p: ['a','b']}, defaultResp));
+     assert.deepEqual(parseQuery({l: '101'}),
+                    _.defaults({l: 101}, defaultResp));
+    assert.deepEqual(parseQuery({limit: '101'}),
+                   _.defaults({l: 101}, defaultResp));
+     assert.deepEqual(parseQuery({skips: '101'}),
+                  _.defaults({sk: 101}, defaultResp));
+     assert.deepEqual(parseQuery({$1: 'a'}), defaultResp);
+     assert.deepEqual(parseQuery({a: '{in}a,b'}),
+                  _.defaults({q: {a: {$in: ['a','b']}}}, defaultResp));
+     assert.deepEqual(parseQuery({a: '{m}k,v'}),
+                 _.defaults({q: {a: {$elemMatch: {key: 'k', value: 'v'}}}}, defaultResp));
+     assert.deepEqual(parseQuery({a: '{empty}'}),
+                 _.defaults({q: {$or: [{a: ''}, {a: {$exists: false}}]}}, defaultResp));
+     assert.deepEqual(parseQuery({a: '{!empty}'}),
+                 _.defaults({q: {$nor: [{a: ''}, {a: {$exists: false}}]}}, defaultResp));
+     assert.deepEqual(parseQuery({a: 'b|c|d'}),
+                 _.defaults({q: {$or: [{a: 'b'}, {a: 'c'}, {a: 'd'}]}}, defaultResp));
 
-  it('all', function(done) {
+  });
+  it('find', function(done) {
     var req = {q:'{}'};
     TestModel.query(req, function(error, data){
       assert.equal( error, undefined );
@@ -193,7 +239,7 @@ describe('Query:basic', function() {
         assert.equal(item['nest.ed'], 'value')
       });
       //this is not supported when no callback is used
-      assert.instanceOf(TestModel.query(req), Error);
+      assert.instanceOf(TestModel.query(req), Promise);
       done();
     });
   });
