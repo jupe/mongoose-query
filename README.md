@@ -53,23 +53,24 @@ module.exports = function query(req, res) {
 
 ```
 var QueryPlugin = require(mongoose-query);
-schema.plugin(QueryPlugin(, options))
+schema.plugin( QueryPlugin(, <options>) )
 ```
-options:
+optional `options`:
 * `logger`: custom logger, e.g. winston logger, default: "dummy logger"
-* `allowEval`: <boolean> Allow to use eval or not, default: false
+* `allowEval`: <boolean> Allow to use eval or not, default: true
 
 Model static methods:
 
-`model.query(<query>(, <callback>))`
+`model.query( <query>(, <callback>) )`
 
-`model.leanQuery(<query>(, <callback>))`: gives plain objects ([lean](http://mongoosejs.com/docs/api.html#query_Query-lean))
+`model.leanQuery(<query>(, <callback>) )`: gives plain objects ([lean](http://mongoosejs.com/docs/api.html#query_Query-lean))
 
-**Note:** without <callback> you get Promise.
+**Note:** without `<callback>` you get Promise.
 
 **URL API:**
 ```
-http://www.myserver.com/query?[q=<query>][&t=<type>][&f=<fields>][&s=<order>][&sk=<skip>][&l=<limit>][&p=<populate>][&fl=<boolean>][&map=<mapFunction>][&reduce=<reduceFunction>]
+http://www.myserver.com/query?[q=<query>][&t=<type>][&f=<fields>][&s=<order>][&sk=<skip>]
+[&l=<limit>][&p=<populate>][&fl=<boolean>][&map=<mapFunction>][&reduce=<reduceFunction>]
 
 q=<query>                   restrict results by the specified JSON query
                             regex e.g. q='{"field":{"$regex":"/mygrep/", "$options":"i"}}'
@@ -105,10 +106,10 @@ Alternative search conditions:
 "key={gt}a"                 Docs key is greater than a
 "key={lt}a"                 Docs key is lower than a
 "key=a|b|c"                 Docs where type of key is Array and contains at least one of given value
+```
 
-Results:
-
-fl=false
+Results with `fl=false`:
+```
 [
  {
  	nest: {
@@ -119,8 +120,10 @@ fl=false
   	}
 }
 ]
+```
 
-fl=true
+Results with `fl=true`:
+```
 [
  {'nest.ed.data': 'value',
   'nest.ed.data2':'value'},
