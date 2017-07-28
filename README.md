@@ -5,14 +5,14 @@ mongoose-query [![Build Status](https://travis-ci.org/jupe/mongoose-query.png?br
 
 [![NPM](https://nodei.co/npm-dl/mongoose-query.png)](https://nodei.co/npm/mongoose-query/)
 
-mongoose query creator. Alternative for mongoose-api-query but without schema understanding.
-This very simple library can be used for example expressjs+mongoose applications to help
-construct mongoose query model directly from url parameters.
+mongoose query creator.
+This library is usefull example with `expressjs` + `mongoose` applications to help construct mongoose query model directly from url parameters.
 
-## History
+## Changes log
 
 |versio|Changes|
 |------|-------|
+|0.3.0|Big refactoring, see more from release note.. e.g. mongoose 4.x support|
 |0.2.1|added oid support, fixed aggregate and support mongoose => 3.8.1
 |0.2.0|replace underscore with lodash, possible to return promise when no callback in use|
 |0.1.7|typo on mapReduce case, !empty keyword added|
@@ -45,23 +45,33 @@ module.exports = function query(req, res) {
 ## Query string example
 
 ```
-http://localhost/query.json?q={"group":"users"}&f=name&sk=1&l=5&p=name
+http://localhost/model?q={"group":"users"}&f=name&sk=1&l=5&p=name
 
 Converted to:
 
 model.find({group: "users"}).select("name").skip(1).limit(5).populate('name')
 ```
 
-**note:** Seems that sorting with limit doesn't work with mongodb 2.4.x without related indexes. Mongodb 2.6.x seems to work.
-
 
 ## doc
 
 ```
-Model.query()
-Model.leanQuery() - gives plain objects ([lean](http://mongoosejs.com/docs/api.html#query_Query-lean))
-``
+var QueryPlugin = require(mongoose-query);
+schema.plugin(QueryPlugin(, options))
+```
+options:
+* `logger`: custom logger, e.g. winston logger, default: "dummy logger"
+* `allowEval`: <boolean> Allow to use eval or not, default: false
 
+Model static methods:
+
+`model.query(<query>(, <callback>))`
+
+`model.leanQuery(<query>(, <callback>))`: gives plain objects ([lean](http://mongoosejs.com/docs/api.html#query_Query-lean))
+
+**Note:** without <callback> you get Promise.
+
+**URL API:**
 ```
 http://www.myserver.com/query?[q=<query>][&t=<type>][&f=<fields>][&s=<order>][&sk=<skip>][&l=<limit>][&p=<populate>][&fl=<boolean>][&map=<mapFunction>][&reduce=<reduceFunction>]
 
