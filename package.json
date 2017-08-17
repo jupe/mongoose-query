@@ -2,7 +2,7 @@
   "name": "mongoose-query",
   "description": "mongoose Query lib",
   "keywords": ["mongoose", "query", "mongodb"],
-  "version": "1.1.0",
+  "version": "1.1.1",
   "homepage": "https://github.com/jupe/mongoose-query",
   "author": "Jussi Vatjus-Anttila <jussiva@gmail.com>)",
   "main": "lib/index",
