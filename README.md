@@ -1,6 +1,8 @@
 mongoose-query [![Build Status](https://travis-ci.org/jupe/mongoose-query.png?branch=master)](https://travis-ci.org/jupe/mongoose-query)
 ==============
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/jupe/mongoose-query.svg)](https://greenkeeper.io/)
+
 [![NPM](https://nodei.co/npm/mongoose-query.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/mongoose-query/)
 
 [![NPM](https://nodei.co/npm-dl/mongoose-query.png)](https://nodei.co/npm/mongoose-query/)
