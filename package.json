@@ -20,7 +20,7 @@
     "lodash": "*"
   },
   "devDependencies": {
-      "mocha": "*",
+      "mocha": "3.5.3",
       "chai": "*",
       "request": "*"
   },
