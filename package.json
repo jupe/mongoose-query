@@ -1,33 +1,37 @@
 {
   "name": "mongoose-query",
   "description": "mongoose Query lib",
-  "keywords": ["mongoose", "query", "mongodb"],
-  "version": "0.3.0",
+  "keywords": [
+    "mongoose",
+    "query",
+    "mongodb"
+  ],
+  "version": "0.4.0",
   "homepage": "https://github.com/jupe/mongoose-query",
   "author": "Jussi Vatjus-Anttila <jussiva@gmail.com>)",
   "main": "lib/index",
-  "bugs" : {
-    "url" : "https://github.com/jupe/mongoose-query/issues"
+  "bugs": {
+    "url": "https://github.com/jupe/mongoose-query/issues"
   },
   "repository": {
-        "type": "git",
-        "url": "https://github.com/jupe/mongoose-query"
+    "type": "git",
+    "url": "https://github.com/jupe/mongoose-query"
   },
-  "licenses" : "MIT",
+  "license": "MIT",
   "dependencies": {
     "mongoose": "^4.11.4",
     "flat": "*",
     "lodash": "*"
   },
   "devDependencies": {
-      "mocha": "3.5.3",
-      "chai": "*",
-      "request": "*"
+    "chai": "*",
+    "mocha": "^4.0.1",
+    "request": "*"
   },
   "contributors": [
     "Jussi Vatjus-Anttila <jussiva@gmail.com>"
   ],
   "scripts": {
-   "test": "mocha -R list"
+    "test": "mocha -R list"
   }
 }

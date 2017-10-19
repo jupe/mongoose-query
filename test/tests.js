@@ -16,10 +16,10 @@ mongoose.Promise = Promise;
 
 let isPromise = function (obj) {
   return !!obj && (typeof obj === 'object' || typeof obj === 'function') && typeof obj.then === 'function';
-}
+};
 let assertPromise = function(obj) {
   expect(isPromise(obj)).to.be.true;
-}
+};
 
 const ObjectId = Schema.ObjectId;
 let OrigSchema = new mongoose.Schema({
@@ -57,18 +57,16 @@ let create = (i, max, callback) => {
       callback();
     });
   }
-}
+};
 
 
 describe('Query:basic', function() {
-  before( function(done){
-    mongoose.connect(  "mongodb://localhost/mongoose-query-tests" );
+  before(function(done){
+    const useMongoClient = true;
+    mongoose.connect("mongodb://localhost/mongoose-query-tests", {useMongoClient});
     mongoose.connection.on('connected', done);
   });
-  before( function(done) {
-    OrigTestModel.remove({}, done);
-  });
-  before( function(done) {
+  before(function(done) {
     this.timeout(10000);
     let obj = new OrigTestModel();
     obj.save((error, doc) => {
@@ -77,7 +75,16 @@ describe('Query:basic', function() {
         create(0, docCount, done);
       });
     });
-  })
+  });
+  after(function(done) {
+    OrigTestModel.remove({}, done);
+  });
+  after(function(done) {
+    TestModel.remove({}, done);
+  });
+  after(function(done) {
+    mongoose.disconnect(done);
+  });
   it('parseQuery', function() {
     let defaultResp = {
       q: {},
@@ -123,104 +130,140 @@ describe('Query:basic', function() {
 
   });
   it('find', function(done) {
-    var req = {q:'{}'};
+    const req = {q:'{}'};
     TestModel.query(req, function(error, data){
       assert.equal( error, undefined );
-      assert.equal( data.length, defaultLimit );
-      assert.isTrue( (data[0].orig+'').match(/([0-9a-z]{24})/) != null );
+
+      const validateData = (obj) => {
+        assert.equal(obj.length, defaultLimit);
+        assert.isTrue((obj[0].orig + '').match(/([0-9a-z]{24})/) != null);
+        _.each(obj, (doc) => {
+          assert.isTrue(!_.isPlainObject(doc))
+        });
+      };
+      validateData(data);
       //alternative:
-      assertPromise(TestModel.query(req));
-      done();
+      const promise = TestModel.query(req);
+      assertPromise(promise);
+      promise.then(validateData).then(done);
     });
   });
   it('regex', function(done) {
-    var req = {q:'{"title": {"$regex": "/^testa/"}, "i": { "$lt": 20}}'};
+    const req = {q:'{"title": {"$regex": "/^testa/"}, "i": { "$lt": 20}}'};
     TestModel.query(req, function(error, data){
       assert.equal( error, undefined );
-      assert.equal( data.length, 10 );
-      assert.isTrue( (data[0].orig+'').match(/([0-9a-z]{24})/) != null );
+      const validateData = (obj) => {
+        assert.equal( obj.length, 10 );
+        assert.isTrue( (obj[0].orig+'').match(/([0-9a-z]{24})/) != null );
+      };
+      validateData(data);
       //alternative
-      assertPromise(TestModel.query(req));
-      done();
+      const promise = TestModel.query(req);
+      assertPromise(promise);
+      promise.then(validateData).then(done);
     });
   });
   it('findOne & sort', function(done) {
-    var req = {q:'{}', t: 'findOne', s: '{"msg": 1}'};
+    const req = {q:'{}', t: 'findOne', s: '{"msg": 1}'};
     TestModel.query(req, function(error, data){
       assert.equal( error, undefined );
-      assert.typeOf( data, 'Object' );
-      assert.equal( data.title, 'testa' );
-      assert.equal( data.msg, 'i#0' );
+      const validateData = (obj) => {
+        assert.typeOf(obj, 'Object');
+        assert.equal(obj.title, 'testa');
+        assert.equal(obj.msg, 'i#0');
+      };
+      validateData(data);
       //alternative
-      assertPromise(TestModel.query(req));
-      done();
+      const promise = TestModel.query(req);
+      assertPromise(promise);
+      promise.then(validateData).then(done);
     });
   });
   it('exact', function(done) {
-    var req = {q:'{"msg":"i#3"}'};
+    const req = {q:'{"msg":"i#3"}'};
     TestModel.query(req, function(error, data){
       assert.equal( error, undefined );
-      assert.equal( data.length, 1 );
-      assert.equal( data[0].msg, "i#3" );
+      const validateData = (obj) => {
+        assert.equal(obj.length, 1);
+        assert.equal(obj[0].msg, "i#3");
+      };
+      validateData(data);
       //alternative
-      assertPromise(TestModel.query(req));
-      done();
+      const promise = TestModel.query(req);
+      assertPromise(promise);
+      promise.then(validateData).then(done);
     });
   });
   it('populate', function(done) {
-    var req = {q:'{"msg":"i#3"}', p: 'orig'};
+    const req = {q:'{"msg":"i#3"}', p: 'orig'};
     TestModel.query(req, function(error, data){
       assert.equal( error, undefined );
-      assert.equal( data.length, 1 );
-      assert.equal( data[0].msg, "i#3" );
-      assert.equal( data[0].orig.value, "original" );
+      const validateData = (obj) => {
+        assert.equal(obj.length, 1);
+        assert.equal(obj[0].msg, "i#3");
+        assert.equal(obj[0].orig.value, "original");
+      };
+      validateData(data);
       //alternative
-      assertPromise(TestModel.query(req));
-      done();
+      const promise = TestModel.query(req);
+      assertPromise(promise);
+      promise.then(validateData).then(done);
     });
   });
   it('limit & select', function(done) {
-    var req = {q:'{}', f: 'title', l:'3', s: '{"title": -1}'};
+    const req = {q:'{}', f: 'title', l:'3', s: '{"title": -1}'};
     TestModel.query(req, function(error, data){
       assert.equal( error, undefined );
-      assert.equal( data.length, 3 );
-      assert.equal( data[0].msg, undefined );
-      assert.equal( data[0].title, "testb" );
-      assert.equal( data[1].msg, undefined );
-      assert.equal( data[1].title, "testb" );
-      assert.equal( data[2].msg, undefined );
-      assert.equal( data[2].title, "testb" );
+      const validateData = (obj) => {
+        assert.equal(obj.length, 3);
+        assert.equal(obj[0].msg, undefined);
+        assert.equal(obj[0].title, "testb");
+        assert.equal(obj[1].msg, undefined);
+        assert.equal(obj[1].title, "testb");
+        assert.equal(obj[2].msg, undefined);
+        assert.equal(obj[2].title, "testb");
+      };
+      validateData(data);
       //alternative
-      assertPromise(TestModel.query(req));
-      done();
+      const promise = TestModel.query(req);
+      assertPromise(promise);
+      promise.then(validateData).then(done);
     });
   });
 
   it('skip', function(done) {
-    var req = {q:'{}', sk:'3'};
+    const req = {q:'{}', sk:'3'};
     TestModel.query(req, function(error, data){
       assert.equal( error, undefined );
-      assert.equal( data.length, defaultLimit );
+      const validateData = (obj) => {
+        assert.equal( obj.length, defaultLimit );
+      };
+      validateData(data);
       //alternative
-      assertPromise(TestModel.query(req));
-      done();
+      const promise = TestModel.query(req);
+      assertPromise(promise);
+      promise.then(validateData).then(done);
     });
   });
 
   it('count', function(done) {
-    var req = {q:'{"$or": [ {"msg":"i#1"}, {"msg":"i#2"}]}', t:'count'};
+    const req = {q:'{"$or": [ {"msg":"i#1"}, {"msg":"i#2"}]}', t:'count'};
     TestModel.query(req, function(error, data){
       assert.equal( error, undefined );
-      assert.typeOf( data, 'object' );
-      assert.equal( data.count, 2 );
+      const validateData = (obj) => {
+        assert.typeOf(obj, 'object');
+        assert.equal(obj.count, 2);
+      };
+      validateData(data);
       //alternative
-      assertPromise(TestModel.query(req));
-      done();
+      const promise = TestModel.query(req);
+      assertPromise(promise);
+      promise.then(validateData).then(done);
     });
   });
 
   it('distinct', function(done) {
-    var req = {f:'title', t:'distinct'};
+    const req = {f:'title', t:'distinct'};
     TestModel.query(req, function(error, data){
       assert.equal( error, undefined );
       assert.equal( data.length, 2 );
@@ -230,83 +273,111 @@ describe('Query:basic', function() {
     });
   });
   it('flatten', function(done) {
-    var req = {q:'{}', fl: 'true', l:'1'};
+    const req = {q:'{}', fl: 'true', l:'1'};
     TestModel.query(req, function(error, data){
       assert.equal(error, undefined);
-      assert.typeOf(data, 'array');
-      data.forEach( function(item){
-        assert.typeOf(item, 'object');
-        assert.equal(item['nest.ed'], 'value')
-      });
+      const validateData = (obj) => {
+        assert.typeOf(obj, 'array');
+        obj.forEach(function (item) {
+          assert.typeOf(item, 'object');
+          assert.equal(item['nest.ed'], 'value')
+        });
+      };
+      validateData(data);
       //this is not supported when no callback is used
-      assert.instanceOf(TestModel.query(req), Promise);
-      done();
+      const promise = TestModel.query(req);
+      assertPromise(promise);
+      promise.then(validateData).then(done);
     });
   });
   it('!empty', function(done){
     //Field exists and is not empty
-    var req = {'nest.ed': '{!empty}-'};
+    const req = {'nest.ed': '{!empty}-'};
     TestModel.query(req, function(error, data){
       assert.equal(error, undefined);
-      assert.equal(data[0].nest.ed, 'value');
-      //alternative
-      assertPromise(TestModel.query(req));
-      done();
+      const validateData = (obj) => {
+        assert.equal(obj[0].nest.ed, 'value');
+      };
+      validateData(data);
+      //this is not supported when no callback is used
+      const promise = TestModel.query(req);
+      assertPromise(promise);
+      promise.then(validateData).then(done);
     });
   });
   it('!empty', function(done){
     //Field exists and is not empty
-    var req = {'empty': '{!empty}-'};
+    const req = {'empty': '{!empty}-'};
     TestModel.query(req, function(error, data){
       assert.equal(error, undefined);
-      assert.equal(data.length, 0);
-      //alternative
-      assertPromise(TestModel.query(req));
-      done();
+      const validateData = (obj) => {
+        assert.equal(obj.length, 0);
+      };
+      validateData(data);
+      //this is not supported when no callback is used
+      const promise = TestModel.query(req);
+      assertPromise(promise);
+      promise.then(validateData).then(done);
     });
   });
   it('empty', function(done){
     //Field is empty or not exists
-    var req = {'empty': '{empty}-'};
+    const req = {'empty': '{empty}-'};
     TestModel.query(req, function(error, data){
       assert.equal(error, undefined);
-      assert.equal(data.length, defaultLimit);
-      //alternative
-      assertPromise(TestModel.query(req));
-      done();
+      const validateData = (obj) => {
+        assert.equal(obj.length, defaultLimit);
+      };
+      validateData(data);
+      //this is not supported when no callback is used
+      const promise = TestModel.query(req);
+      assertPromise(promise);
+      promise.then(validateData).then(done);
     });
   });
   it('limit more than default', function(done){
     //Field is empty or not exists
-    var req = {'l': '2000'};
+    const req = {'l': '2000'};
     TestModel.query(req, function(error, data){
       assert.equal(error, undefined);
-      assert.equal(data.length, 2000);
-      //alternative
-      assertPromise(TestModel.query(req));
-      done();
+      const validateData = (obj) => {
+        assert.equal(obj.length, 2000);
+      };
+      validateData(data);
+      //this is not supported when no callback is used
+      const promise = TestModel.query(req);
+      assertPromise(promise);
+      promise.then(validateData).then(done);
     });
   });
   it('limit with skip', function(done){
     //Field is empty or not exists
     var req = {'l': '2000', 'sk': '2500'};
-    TestModel.query(req, function(error, data){
+    TestModel.query(req, function(error, data) {
       assert.equal(error, undefined);
-      assert.equal(data.length, 1500);
-      //alternative
-      assertPromise(TestModel.query(req));
-      done();
+      const validateData = (obj) => {
+        assert.equal(obj.length, 1500);
+      };
+      validateData(data);
+      //this is not supported when no callback is used
+      const promise = TestModel.query(req);
+      assertPromise(promise);
+      promise.then(validateData).then(done);
     });
   });
   it('limit with filter', function(done){
     //Field is empty or not exists
-    var req = {'l': '2000', 'q': '{ "title": "testa"}'};
+    const req = {'l': '2000', 'q': '{ "title": "testa"}'};
     TestModel.query(req, function(error, data){
       assert.equal(error, undefined);
-      assert.equal(data.length, 2000);
-      //alternative
-      assertPromise(TestModel.query(req));
-      done();
+      const validateData = (obj) => {
+        assert.equal(obj.length, 2000);
+      };
+      validateData(data);
+      //this is not supported when no callback is used
+      const promise = TestModel.query(req);
+      assertPromise(promise);
+      promise.then(validateData).then(done);
     });
   });
   it('limit with sort', function(done){
@@ -314,22 +385,63 @@ describe('Query:basic', function() {
     var req = {'l': '2000', 's': '{ "i": -1 }'};
     TestModel.query(req, function(error, data){
       assert.equal(error, undefined);
-      assert.equal(data.length, 2000);
-      //alternative
-      assertPromise(TestModel.query(req));
-      done();
+      const validateData = (obj) => {
+        assert.equal(obj.length, 2000);
+      };
+      validateData(data);
+      //this is not supported when no callback is used
+      const promise = TestModel.query(req);
+      assertPromise(promise);
+      promise.then(validateData).then(done);
     });
   });
   it('oid wildcard', function(done) {
     var req = {q:'{"_id": "oid:57ae125aaf1b792c1768982b"}'};
     TestModel.query(req, function(error, data){
       assert.equal( error, undefined );
-      assert.equal( data.length, 1);
-      assert.equal( data[0]._id, "57ae125aaf1b792c1768982b" );
-
-      //alternative
-      assertPromise(TestModel.query(req));
-      done();
+      const validateData = (obj) => {
+        assert.equal( obj.length, 1);
+        assert.equal( obj[0]._id, "57ae125aaf1b792c1768982b" );
+      };
+      validateData(data);
+      //this is not supported when no callback is used
+      const promise = TestModel.query(req);
+      assertPromise(promise);
+      promise.then(validateData).then(done);
+    });
+  });
+  it('leanQuery', function(done) {
+    const req = {};
+    TestModel.leanQuery(req, function(error, data) {
+      assert.equal( error, undefined );
+      const validateData = (obj) => {
+        assert.equal( obj.length, defaultLimit );
+        _.each(obj, (json) => {
+          assert.isTrue(_.isPlainObject(json))
+        });
+      };
+      validateData(data);
+      //this is not supported when no callback is used
+      const promise = TestModel.leanQuery(req);
+      assertPromise(promise);
+      promise.then(validateData).then(done);
+    });
+  });
+  it('leanQuery with flatten', function(done) {
+    const req = {fl: 1};
+    TestModel.leanQuery(req, function(error, data) {
+      assert.equal( error, undefined );
+      const validateData = (obj) => {
+        assert.equal(obj.length, defaultLimit);
+        _.each(obj, (json) => {
+          assert.isTrue(_.isPlainObject(json))
+        });
+      };
+      validateData(data);
+      //this is not supported when no callback is used
+      const promise = TestModel.leanQuery(req);
+      assertPromise(promise);
+      promise.then(validateData).then(done);
     });
   });
 });
