@@ -21,6 +21,7 @@ model.find({group: "users"}).select("name").skip(1).limit(5).populate('name')
 
 |versio|Changes|
 |------|-------|
+|0.4.0|Fix lean query with flatten + couple other and add promise tests|
 |0.3.0|Big refactoring, see more from release note.. e.g. mongoose 4.x support|
 |0.2.1|added oid support, fixed aggregate and support mongoose => 3.8.1
 |0.2.0|replace underscore with lodash, possible to return promise when no callback in use|
