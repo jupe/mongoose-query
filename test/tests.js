@@ -61,12 +61,12 @@ let create = (i, max, callback) => {
 
 
 describe('Query:basic', function() {
-  before( function(done){
+  before(function(done){
     const useMongoClient = true;
     mongoose.connect("mongodb://localhost/mongoose-query-tests", {useMongoClient});
     mongoose.connection.on('connected', done);
   });
-  before( function(done) {
+  before(function(done) {
     this.timeout(10000);
     let obj = new OrigTestModel();
     obj.save((error, doc) => {
@@ -81,6 +81,9 @@ describe('Query:basic', function() {
   });
   after(function(done) {
     TestModel.remove({}, done);
+  });
+  after(function(done) {
+    mongoose.disconnect(done);
   });
   it('parseQuery', function() {
     let defaultResp = {
