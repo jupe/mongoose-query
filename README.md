@@ -1,7 +1,6 @@
-mongoose-query [![Build Status](https://travis-ci.org/jupe/mongoose-query.png?branch=master)](https://travis-ci.org/jupe/mongoose-query)
-==============
+mongoose-query[![Build Status](https://travis-ci.org/jupe/mongoose-query.png?branch=master)](https://travis-ci.org/jupe/mongoose-query)[![Greenkeeper badge](https://badges.greenkeeper.io/jupe/mongoose-query.svg)](https://greenkeeper.io/)[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/jupe/mongoose-query.svg)](https://greenkeeper.io/)
+==============
 
 [![NPM](https://nodei.co/npm/mongoose-query.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/mongoose-query/)
 
