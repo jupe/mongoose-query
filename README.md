@@ -2,12 +2,12 @@
 [![Build Status](https://travis-ci.org/jupe/mongoose-query.png?branch=master)](https://travis-ci.org/jupe/mongoose-query)
 [![Greenkeeper badge](https://badges.greenkeeper.io/jupe/mongoose-query.svg)](https://greenkeeper.io/)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
-[![License badge](https://img.shields.io/badge/license-MIT-blue.svg)
-[![Stars badge](https://img.shields.io/github/stars/jupe/mongoose-query.svg)
+<br>
+[![License badge](https://img.shields.io/badge/license-MIT-blue.svg)](https://img.shields.io)
 [![release](http://github-release-version.herokuapp.com/github/jupe/mongoose-query/release.svg?style=flat)](https://github.com/jupe/mongoose-query/releases/latest)
-
-
-[![NPM](https://nodei.co/npm/mongoose-query.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/mongoose-query/)
+[![npm version](https://badge.fury.io/js/mongoose-query.svg)](https://badge.fury.io/js/mongoose-query)
+<br/>
+[![Stars badge](https://img.shields.io/github/stars/jupe/mongoose-query.svg)](https://img.shields.io)
 
 This library is usefull example with `expressjs` + `mongoose` applications to help construct mongoose query model directly from url parameters. Example:
 
