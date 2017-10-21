@@ -61,6 +61,7 @@ schema.plugin( QueryPlugin(, <options>) )
 optional `options`:
 * `logger`: custom logger, e.g. winston logger, default: "dummy logger"
 * `allowEval`: <boolean> Allow to use eval or not, default: true
+* `includeAllParams`: <boolean> Parse also other values. e.g. `?name=me`. default: true
 
 Model static methods:
 
