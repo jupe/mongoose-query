@@ -36,6 +36,11 @@ Use [npm](https://www.npmjs.org/package/mongoose-query):
 npm install mongoose-query
 ```
 
+## Test
+```
+npm test && npm lint
+```
+
 ## Usage Example
 
 ```

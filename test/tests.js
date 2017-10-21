@@ -76,60 +76,60 @@ describe('unittests', function () {
     };
     assert.deepEqual(
       parseQuery({ q: '{"a": "b"}' }),
-      _.defaults({ q: { a: 'b' } }, defaultResp),
+      _.defaults({ q: { a: 'b' } }, defaultResp)
     );
     assert.deepEqual(
       parseQuery({ t: 'count' }),
-      _.defaults({ t: 'count' }, defaultResp),
+      _.defaults({ t: 'count' }, defaultResp)
     );
     assert.deepEqual(
       parseQuery({ p: 'a' }),
-      _.defaults({ p: 'a' }, defaultResp),
+      _.defaults({ p: 'a' }, defaultResp)
     );
     assert.deepEqual(
       parseQuery({ p: '["a","b"]' }),
-      _.defaults({ p: ['a', 'b'] }, defaultResp),
+      _.defaults({ p: ['a', 'b'] }, defaultResp)
     );
     assert.deepEqual(
       parseQuery({ p: '{"a":"b"}' }),
-      _.defaults({ p: { a: 'b' } }, defaultResp),
+      _.defaults({ p: { a: 'b' } }, defaultResp)
     );
     assert.deepEqual(
       parseQuery({ p: 'a,b' }),
-      _.defaults({ p: ['a', 'b'] }, defaultResp),
+      _.defaults({ p: ['a', 'b'] }, defaultResp)
     );
     assert.deepEqual(
       parseQuery({ l: '101' }),
-      _.defaults({ l: 101 }, defaultResp),
+      _.defaults({ l: 101 }, defaultResp)
     );
     assert.deepEqual(
       parseQuery({ limit: '101' }),
-      _.defaults({ l: 101 }, defaultResp),
+      _.defaults({ l: 101 }, defaultResp)
     );
     assert.deepEqual(
       parseQuery({ skips: '101' }),
-      _.defaults({ sk: 101 }, defaultResp),
+      _.defaults({ sk: 101 }, defaultResp)
     );
     assert.deepEqual(parseQuery({ $1: 'a' }), defaultResp);
     assert.deepEqual(
       parseQuery({ a: '{in}a,b' }),
-      _.defaults({ q: { a: { $in: ['a', 'b'] } } }, defaultResp),
+      _.defaults({ q: { a: { $in: ['a', 'b'] } } }, defaultResp)
     );
     assert.deepEqual(
       parseQuery({ a: '{m}k,v' }),
-      _.defaults({ q: { a: { $elemMatch: { k: 'v' } } } }, defaultResp),
+      _.defaults({ q: { a: { $elemMatch: { k: 'v' } } } }, defaultResp)
     );
     assert.deepEqual(
       parseQuery({ a: '{empty}' }),
-      _.defaults({ q: { $or: [{ a: '' }, { a: { $exists: false } }] } }, defaultResp),
+      _.defaults({ q: { $or: [{ a: '' }, { a: { $exists: false } }] } }, defaultResp)
     );
     assert.deepEqual(
       parseQuery({ a: '{!empty}' }),
-      _.defaults({ q: { $nor: [{ a: '' }, { a: { $exists: false } }] } }, defaultResp),
+      _.defaults({ q: { $nor: [{ a: '' }, { a: { $exists: false } }] } }, defaultResp)
     );
     assert.deepEqual(
       parseQuery({ a: 'b|c|d' }),
-      _.defaults({ q: { $or: [{ a: 'b' }, { a: 'c' }, { a: 'd' }] } }, defaultResp),
+      _.defaults({ q: { $or: [{ a: 'b' }, { a: 'c' }, { a: 'd' }] } }, defaultResp)
     );
   });
 });
