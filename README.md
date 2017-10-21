@@ -1,10 +1,11 @@
-mongoose-query[![Build Status](https://travis-ci.org/jupe/mongoose-query.png?branch=master)](https://travis-ci.org/jupe/mongoose-query)[![Greenkeeper badge](https://badges.greenkeeper.io/jupe/mongoose-query.svg)](https://greenkeeper.io/)[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
-
-==============
+# mongoose-query
+[![Build Status](https://travis-ci.org/jupe/mongoose-query.png?branch=master)](https://travis-ci.org/jupe/mongoose-query)
+[![Greenkeeper badge](https://badges.greenkeeper.io/jupe/mongoose-query.svg)](https://greenkeeper.io/)
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+[![License badge](https://img.shields.io/badge/license-MIT-blue.svg)
+[![Stars badge](https://img.shields.io/github/stars/jupe/mongoose-query.svg)
 
 [![NPM](https://nodei.co/npm/mongoose-query.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/mongoose-query/)
-
-[![NPM](https://nodei.co/npm-dl/mongoose-query.png)](https://nodei.co/npm/mongoose-query/)
 
 This library is usefull example with `expressjs` + `mongoose` applications to help construct mongoose query model directly from url parameters. Example:
 
