@@ -33,6 +33,9 @@ let TestSchema = new mongoose.Schema({
   , empty  : {type: String}
   , orig   : {type: ObjectId, ref: 'originals' }
   , i      : {type: Number, index: true }
+  , arr    : [
+      {ay: {type: String}}
+    ]
   , nest   : {
     ed: {type: String, default: 'value'}
   }
@@ -47,7 +50,7 @@ let _id;
 
 let create = (i, max, callback) => {
   if( i<max -1){
-    let obj = new TestModel({title: (i%2===0?'testa':'testb'), msg: 'i#'+i, orig: _id, i: i});
+    let obj = new TestModel({title: (i%2===0?'testa':'testb'), msg: 'i#'+i, orig: _id, i: i, arr: [{ay: `i#${i}`}]});
     obj.save( (error, doc) => {
       create(i+1, max, callback);
     });
@@ -111,7 +114,7 @@ describe('unittests', function() {
      assert.deepEqual(parseQuery({a: '{in}a,b'}),
                   _.defaults({q: {a: {$in: ['a','b']}}}, defaultResp));
      assert.deepEqual(parseQuery({a: '{m}k,v'}),
-                 _.defaults({q: {a: {$elemMatch: {key: 'k', value: 'v'}}}}, defaultResp));
+                 _.defaults({q: {a: {$elemMatch: {k: 'v'}}}}, defaultResp));
      assert.deepEqual(parseQuery({a: '{empty}'}),
                  _.defaults({q: {$or: [{a: ''}, {a: {$exists: false}}]}}, defaultResp));
      assert.deepEqual(parseQuery({a: '{!empty}'}),
@@ -462,4 +465,22 @@ describe('Query:basic', function() {
       promise.then(validateData).then(done);
     });
   });
+  it('number search', function (done) {
+    const req = {i: '1'};
+    TestModel.leanQuery(req, function(error, data) {
+      assert.equal( error, undefined );
+      assert.equal( data.length, 1);
+      assert.equal( data[0].i, 1);
+      done();
+    });
+  });
+  it('match', function (done) {
+    const req = {arr: "{m}ay,i#1"};
+    TestModel.leanQuery(req, function(error, data) {
+      assert.equal(error, undefined );
+      assert.equal(data.length, 1);
+      assert.equal(data[0].arr[0].ay, 'i#1');
+      done();
+    });
+  })
 });

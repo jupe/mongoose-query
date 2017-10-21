@@ -61,6 +61,7 @@ schema.plugin( QueryPlugin(, <options>) )
 optional `options`:
 * `logger`: custom logger, e.g. winston logger, default: "dummy logger"
 * `allowEval`: <boolean> Allow to use eval or not, default: true
+* `includeAllParams`: <boolean> Parse also other values. e.g. `?name=me`. default: true
 
 Model static methods:
 
@@ -109,7 +110,12 @@ Alternative search conditions:
 "key={gt}a"                 Docs key is greater than a
 "key={lt}a"                 Docs key is lower than a
 "key=a|b|c"                 Docs where type of key is Array and contains at least one of given value
+"key={m}key,value"          elemMatch query
 ```
+
+**References to mongo:**
+- [elemMatch](https://docs.mongodb.com/manual/reference/operator/query/elemMatch/)
+- [size](https://docs.mongodb.com/manual/reference/operator/query/size/)
 
 Results with `fl=false`:
 ```
