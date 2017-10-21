@@ -10,7 +10,8 @@ const fs = require('fs')
   , expect = chai.expect
 /* QueryPlugin itself */
   , Query = require('../')
-  , parseQuery = require('../lib/parseQuery');
+  , parseQuery = require('../lib/parseQuery')
+  , {parseDateCustom} = require('../lib/tools');
 
 mongoose.Promise = Promise;
 
@@ -59,31 +60,21 @@ let create = (i, max, callback) => {
   }
 };
 
-
-describe('Query:basic', function() {
-  before(function(done){
-    const useMongoClient = true;
-    mongoose.connect("mongodb://localhost/mongoose-query-tests", {useMongoClient});
-    mongoose.connection.on('connected', done);
-  });
-  before(function(done) {
-    this.timeout(10000);
-    let obj = new OrigTestModel();
-    obj.save((error, doc) => {
-       _id = doc._id;
-       TestModel.remove({}, () => {
-        create(0, docCount, done);
-      });
+describe('unittests', function() {
+  describe('parseDateCustom', function () {
+    it('is not valid date', function () {
+      assert.isNaN(parseDateCustom("2000"));
+      assert.isNaN(parseDateCustom("1000128123"));
+      assert.isNaN(parseDateCustom("2011A1020"));
+      assert.isNaN(parseDateCustom(""));
+      assert.isNaN(parseDateCustom());
     });
-  });
-  after(function(done) {
-    OrigTestModel.remove({}, done);
-  });
-  after(function(done) {
-    TestModel.remove({}, done);
-  });
-  after(function(done) {
-    mongoose.disconnect(done);
+    it('is valid', function () {
+      assert.isTrue(_.isDate(parseDateCustom("2017/09/10")));
+      assert.isTrue(_.isDate(parseDateCustom("31/2/2010")));
+      assert.isTrue(_.isDate(parseDateCustom("2011-10-10T14:48:00"))); // ISO 8601 with time
+      assert.isTrue(_.isDate(parseDateCustom("2011-10-10"))); // ISO 8601
+    });
   });
   it('parseQuery', function() {
     let defaultResp = {
@@ -129,6 +120,33 @@ describe('Query:basic', function() {
                  _.defaults({q: {$or: [{a: 'b'}, {a: 'c'}, {a: 'd'}]}}, defaultResp));
 
   });
+});
+describe('Query:basic', function() {
+  before(function(done){
+    const useMongoClient = true;
+    mongoose.connect("mongodb://localhost/mongoose-query-tests", {useMongoClient});
+    mongoose.connection.on('connected', done);
+  });
+  before(function(done) {
+    this.timeout(10000);
+    let obj = new OrigTestModel();
+    obj.save((error, doc) => {
+       _id = doc._id;
+       TestModel.remove({}, () => {
+        create(0, docCount, done);
+      });
+    });
+  });
+  after(function(done) {
+    OrigTestModel.remove({}, done);
+  });
+  after(function(done) {
+    TestModel.remove({}, done);
+  });
+  after(function(done) {
+    mongoose.disconnect(done);
+  });
+
   it('find', function(done) {
     const req = {q:'{}'};
     TestModel.query(req, function(error, data){
