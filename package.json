@@ -39,6 +39,7 @@
     "Jussi Vatjus-Anttila <jussiva@gmail.com>"
   ],
   "scripts": {
-    "test": "mocha -R list"
+    "test": "mocha -R list",
+    "lint": "./node_modules/eslint/bin/eslint.js ."
   }
 }
