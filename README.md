@@ -38,7 +38,7 @@ npm install mongoose-query
 
 ## Test
 ```
-npm test && npm lint
+npm test && npm run lint
 ```
 
 ## Usage Example
