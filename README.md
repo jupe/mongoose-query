@@ -132,3 +132,14 @@ Results with `fl=true`:
   'nest.ed.data2':'value'},
 ]
 ```
+
+
+#### Date
+
+Allowed date formats:
+- `2010/10/1` (y/m/d)
+- `31/2/2010` (d/m/y)
+- `2011-10-10T14:48:00` (ISO 8601)
+
+**Note:**
+Only valid format is ISO when using date inside `q` -parameter.

@@ -11,7 +11,7 @@ const fs = require('fs')
 /* QueryPlugin itself */
   , Query = require('../')
   , parseQuery = require('../lib/parseQuery')
-  , {isStringValidDate} = require('../lib/tools');
+  , {parseDateCustom} = require('../lib/tools');
 
 mongoose.Promise = Promise;
 
@@ -61,15 +61,19 @@ let create = (i, max, callback) => {
 };
 
 describe('unittests', function() {
-  describe('isStringValidDate', function () {
-    it('is not valid', function () {
-      assert.isFalse(isStringValidDate("123456"));
-      assert.isFalse(isStringValidDate(""));
-      assert.isFalse(isStringValidDate());
+  describe('parseDateCustom', function () {
+    it('is not valid date', function () {
+      assert.isNaN(parseDateCustom("2000"));
+      assert.isNaN(parseDateCustom("1000128123"));
+      assert.isNaN(parseDateCustom("2011A1020"));
+      assert.isNaN(parseDateCustom(""));
+      assert.isNaN(parseDateCustom());
     });
     it('is valid', function () {
-      assert.isTrue(isStringValidDate("2017/09/10"));
-      assert.isTrue(isStringValidDate("31/2/2010"));
+      assert.isTrue(_.isDate(parseDateCustom("2017/09/10")));
+      assert.isTrue(_.isDate(parseDateCustom("31/2/2010")));
+      assert.isTrue(_.isDate(parseDateCustom("2011-10-10T14:48:00"))); // ISO 8601 with time
+      assert.isTrue(_.isDate(parseDateCustom("2011-10-10"))); // ISO 8601
     });
   });
   it('parseQuery', function() {
