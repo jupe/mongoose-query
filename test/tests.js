@@ -114,7 +114,7 @@ describe('unittests', function() {
      assert.deepEqual(parseQuery({a: '{in}a,b'}),
                   _.defaults({q: {a: {$in: ['a','b']}}}, defaultResp));
      assert.deepEqual(parseQuery({a: '{m}k,v'}),
-                 _.defaults({q: {a: {$elemMatch: {key: 'k', value: 'v'}}}}, defaultResp));
+                 _.defaults({q: {a: {$elemMatch: {k: 'v'}}}}, defaultResp));
      assert.deepEqual(parseQuery({a: '{empty}'}),
                  _.defaults({q: {$or: [{a: ''}, {a: {$exists: false}}]}}, defaultResp));
      assert.deepEqual(parseQuery({a: '{!empty}'}),
