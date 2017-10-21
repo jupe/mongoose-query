@@ -24,7 +24,7 @@ const assertPromise = function (obj) {
 
 const { ObjectId } = Schema;
 const OrigSchema = new mongoose.Schema({
-  value: { type: String, default: 'original' },
+  value: { type: String, default: 'original' }
 });
 const TestSchema = new mongoose.Schema({
   title: { type: String, index: true },
@@ -34,11 +34,11 @@ const TestSchema = new mongoose.Schema({
   orig: { type: ObjectId, ref: 'originals' },
   i: { type: Number, index: true },
   arr: [
-    { ay: { type: String } },
+    { ay: { type: String } }
   ],
   nest: {
-    ed: { type: String, default: 'value' },
-  },
+    ed: { type: String, default: 'value' }
+  }
 });
 TestSchema.plugin(Query);
 
@@ -72,7 +72,7 @@ describe('unittests', function () {
       sk: false,
       l: 1000,
       p: false,
-      fl: false,
+      fl: false
     };
     assert.deepEqual(
       parseQuery({ q: '{"a": "b"}' }),
@@ -142,14 +142,14 @@ describe('Query:apitests', function () {
   const create = (i, max, callback) => {
     if (i < max - 1) {
       const obj = new TestModel({
-        title: (i % 2 === 0 ? 'testa' : 'testb'), msg: `i#${i}`, orig: _id, i, arr: [{ ay: `i#${i}` }],
+        title: (i % 2 === 0 ? 'testa' : 'testb'), msg: `i#${i}`, orig: _id, i, arr: [{ ay: `i#${i}` }]
       });
       obj.save(() => {
         create(i + 1, max, callback);
       });
     } else {
       const obj = new TestModel({
-        _id: '57ae125aaf1b792c1768982b', title: (i % 2 === 0 ? 'testa' : 'testb'), msg: `i#${i}`, orig: _id, i,
+        _id: '57ae125aaf1b792c1768982b', title: (i % 2 === 0 ? 'testa' : 'testb'), msg: `i#${i}`, orig: _id, i
       });
       obj.save(callback);
     }
@@ -263,7 +263,7 @@ describe('Query:apitests', function () {
   });
   it('limit & select', function (done) {
     const req = {
-      q: '{}', f: 'title', l: '3', s: '{"title": -1}',
+      q: '{}', f: 'title', l: '3', s: '{"title": -1}'
     };
     TestModel.query(req, function (error, data) {
       assert.equal(error, undefined);

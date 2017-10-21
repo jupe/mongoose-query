@@ -9,5 +9,11 @@
         "import",
         "node",
         "promise"
-    ]
+    ],
+    "rules": {
+        "comma-dangle": [
+            "error",
+            "never"
+        ]
+    }
 }
