@@ -10,7 +10,8 @@ const fs = require('fs')
   , expect = chai.expect
 /* QueryPlugin itself */
   , Query = require('../')
-  , parseQuery = require('../lib/parseQuery');
+  , parseQuery = require('../lib/parseQuery')
+  , {isStringValidDate} = require('../lib/tools');
 
 mongoose.Promise = Promise;
 
@@ -59,31 +60,17 @@ let create = (i, max, callback) => {
   }
 };
 
-
-describe('Query:basic', function() {
-  before(function(done){
-    const useMongoClient = true;
-    mongoose.connect("mongodb://localhost/mongoose-query-tests", {useMongoClient});
-    mongoose.connection.on('connected', done);
-  });
-  before(function(done) {
-    this.timeout(10000);
-    let obj = new OrigTestModel();
-    obj.save((error, doc) => {
-       _id = doc._id;
-       TestModel.remove({}, () => {
-        create(0, docCount, done);
-      });
+describe('unittests', function() {
+  describe('isStringValidDate', function () {
+    it('is not valid', function () {
+      assert.isFalse(isStringValidDate("123456"));
+      assert.isFalse(isStringValidDate(""));
+      assert.isFalse(isStringValidDate());
     });
-  });
-  after(function(done) {
-    OrigTestModel.remove({}, done);
-  });
-  after(function(done) {
-    TestModel.remove({}, done);
-  });
-  after(function(done) {
-    mongoose.disconnect(done);
+    it('is valid', function () {
+      assert.isTrue(isStringValidDate("2017/09/10"));
+      assert.isTrue(isStringValidDate("31/2/2010"));
+    });
   });
   it('parseQuery', function() {
     let defaultResp = {
@@ -129,6 +116,33 @@ describe('Query:basic', function() {
                  _.defaults({q: {$or: [{a: 'b'}, {a: 'c'}, {a: 'd'}]}}, defaultResp));
 
   });
+});
+describe('Query:basic', function() {
+  before(function(done){
+    const useMongoClient = true;
+    mongoose.connect("mongodb://localhost/mongoose-query-tests", {useMongoClient});
+    mongoose.connection.on('connected', done);
+  });
+  before(function(done) {
+    this.timeout(10000);
+    let obj = new OrigTestModel();
+    obj.save((error, doc) => {
+       _id = doc._id;
+       TestModel.remove({}, () => {
+        create(0, docCount, done);
+      });
+    });
+  });
+  after(function(done) {
+    OrigTestModel.remove({}, done);
+  });
+  after(function(done) {
+    TestModel.remove({}, done);
+  });
+  after(function(done) {
+    mongoose.disconnect(done);
+  });
+
   it('find', function(done) {
     const req = {q:'{}'};
     TestModel.query(req, function(error, data){
