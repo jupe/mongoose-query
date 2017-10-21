@@ -1,7 +1,6 @@
-mongoose-query [![Build Status](https://travis-ci.org/jupe/mongoose-query.png?branch=master)](https://travis-ci.org/jupe/mongoose-query)
-==============
+mongoose-query[![Build Status](https://travis-ci.org/jupe/mongoose-query.png?branch=master)](https://travis-ci.org/jupe/mongoose-query)[![Greenkeeper badge](https://badges.greenkeeper.io/jupe/mongoose-query.svg)](https://greenkeeper.io/)[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/jupe/mongoose-query.svg)](https://greenkeeper.io/)
+==============
 
 [![NPM](https://nodei.co/npm/mongoose-query.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/mongoose-query/)
 
@@ -17,10 +16,18 @@ Converted to:
 model.find({group: "users"}).select("name").skip(1).limit(5).populate('name')
 ```
 
+### Tested with node.js versions
+- 6
+- 7
+- 8
+- lts
+- node
+
 ## Changes log
 
 |versio|Changes|
 |------|-------|
+|0.5.0|Cleanup
 |0.4.0|Fix lean query with flatten + couple other and add promise tests|
 |0.3.0|Big refactoring, see more from release note.. e.g. mongoose 4.x support|
 |0.2.1|added oid support, fixed aggregate and support mongoose => 3.8.1
@@ -34,6 +41,11 @@ model.find({group: "users"}).select("name").skip(1).limit(5).populate('name')
 Use [npm](https://www.npmjs.org/package/mongoose-query):
 ```
 npm install mongoose-query
+```
+
+## Test
+```
+npm test && npm run lint
 ```
 
 ## Usage Example
