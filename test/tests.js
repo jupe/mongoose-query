@@ -5,7 +5,7 @@ const _ = require('lodash');
 const mongoose = require('mongoose');
 const chai = require('chai');
 
-const { Schema } = mongoose;
+const { Schema, Types } = mongoose;
 const { assert, expect } = chai;
 
 /* QueryPlugin itself */
@@ -91,8 +91,16 @@ describe('unittests', function () {
       _.defaults({ p: '000000000000000000000000' }, defaultResp)
     );
     assert.deepEqual(
-      parseQuery({ p: '00000000000000000000000' }),
+      parseQuery({ p: '000000000000000000' }),
       _.defaults({ p: 0 }, defaultResp)
+    );
+    assert.deepEqual(
+      parseQuery({ p: 'oid:00000000000000000000000' }),
+      _.defaults({ p: ObjectId('00000000000000000000000') }, defaultResp)
+    );
+    assert.deepEqual(
+      parseQuery({ q: '{"id": "oid:000000000000000000000000"}' }),
+      _.defaults({ q: { id: ObjectId('000000000000000000000000') } }, defaultResp)
     );
     assert.deepEqual(
       parseQuery({ p: '["a","b"]' }),
