@@ -87,6 +87,14 @@ describe('unittests', function () {
       _.defaults({ p: 'a' }, defaultResp)
     );
     assert.deepEqual(
+      parseQuery({ p: '000000000000000000000000' }),
+      _.defaults({ p: '000000000000000000000000' }, defaultResp)
+    );
+    assert.deepEqual(
+      parseQuery({ p: '00000000000000000000000' }),
+      _.defaults({ p: 0 }, defaultResp)
+    );
+    assert.deepEqual(
       parseQuery({ p: '["a","b"]' }),
       _.defaults({ p: ['a', 'b'] }, defaultResp)
     );
@@ -131,9 +139,10 @@ describe('unittests', function () {
       parseQuery({ a: 'b|c|d' }),
       _.defaults({ q: { $or: [{ a: 'b' }, { a: 'c' }, { a: 'd' }] } }, defaultResp)
     );
+    assert.throws(parseQuery.bind({ sort_by: undefined }), Error);
   });
 });
-describe('Query:apitests', function () {
+describe.skip('Query:apitests', function () {
   let _id;
 
   const docCount = 4000;
