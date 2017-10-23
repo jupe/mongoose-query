@@ -20,11 +20,7 @@ model.find({group: "users"}).select("name").skip(1).limit(5).populate('name')
 ```
 
 ### Tested with node.js versions
-- 6
-- 7
-- 8
-- lts
-- node
+6.x, 7.x, 8.x, LTS, latest release
 
 ## Changes log
 
@@ -104,6 +100,7 @@ fl=<boolean>                Flat results or not
 
 Special values:
 "oid:<string>"              string is converted to ObjectId
+"/regex/(options)"          converted to regex
 { $regex: /<string>/,       regex match with optional regex options
  ($options: "") }        
 

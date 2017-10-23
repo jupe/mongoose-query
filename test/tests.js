@@ -61,7 +61,7 @@ describe('unittests', function () {
       assert.isTrue(_.isDate(parseDateCustom('2011-10-10'))); // ISO 8601
     });
   });
-  it('parseQuery', function () {
+  describe('parseQuery', function () {
     const defaultResp = {
       q: {},
       map: '',
@@ -74,83 +74,114 @@ describe('unittests', function () {
       p: false,
       fl: false
     };
-    assert.deepEqual(
-      parseQuery({ q: '{"a": "b"}' }),
-      _.defaults({ q: { a: 'b' } }, defaultResp)
-    );
-    assert.deepEqual(
-      parseQuery({ t: 'count' }),
-      _.defaults({ t: 'count' }, defaultResp)
-    );
-    assert.deepEqual(
-      parseQuery({ p: 'a' }),
-      _.defaults({ p: 'a' }, defaultResp)
-    );
-    assert.deepEqual(
-      parseQuery({ p: '000000000000000000000000' }),
-      _.defaults({ p: '000000000000000000000000' }, defaultResp)
-    );
-    assert.deepEqual(
-      parseQuery({ p: '000000000000000000' }),
-      _.defaults({ p: 0 }, defaultResp)
-    );
-    assert.deepEqual(
-      parseQuery({ p: 'oid:00000000000000000000000' }),
-      _.defaults({ p: ObjectId('00000000000000000000000') }, defaultResp)
-    );
-    assert.deepEqual(
-      parseQuery({ q: '{"id": "oid:000000000000000000000000"}' }),
-      _.defaults({ q: { id: ObjectId('000000000000000000000000') } }, defaultResp)
-    );
-    assert.deepEqual(
-      parseQuery({ p: '["a","b"]' }),
-      _.defaults({ p: ['a', 'b'] }, defaultResp)
-    );
-    assert.deepEqual(
-      parseQuery({ p: '{"a":"b"}' }),
-      _.defaults({ p: { a: 'b' } }, defaultResp)
-    );
-    assert.deepEqual(
-      parseQuery({ p: 'a,b' }),
-      _.defaults({ p: ['a', 'b'] }, defaultResp)
-    );
-    assert.deepEqual(
-      parseQuery({ l: '101' }),
-      _.defaults({ l: 101 }, defaultResp)
-    );
-    assert.deepEqual(
-      parseQuery({ limit: '101' }),
-      _.defaults({ l: 101 }, defaultResp)
-    );
-    assert.deepEqual(
-      parseQuery({ skips: '101' }),
-      _.defaults({ sk: 101 }, defaultResp)
-    );
-    assert.deepEqual(parseQuery({ $1: 'a' }), defaultResp);
-    assert.deepEqual(
-      parseQuery({ a: '{in}a,b' }),
-      _.defaults({ q: { a: { $in: ['a', 'b'] } } }, defaultResp)
-    );
-    assert.deepEqual(
-      parseQuery({ a: '{m}k,v' }),
-      _.defaults({ q: { a: { $elemMatch: { k: 'v' } } } }, defaultResp)
-    );
-    assert.deepEqual(
-      parseQuery({ a: '{empty}' }),
-      _.defaults({ q: { $or: [{ a: '' }, { a: { $exists: false } }] } }, defaultResp)
-    );
-    assert.deepEqual(
-      parseQuery({ a: '{!empty}' }),
-      _.defaults({ q: { $nor: [{ a: '' }, { a: { $exists: false } }] } }, defaultResp)
-    );
-    assert.deepEqual(
-      parseQuery({ a: 'b|c|d' }),
-      _.defaults({ q: { $or: [{ a: 'b' }, { a: 'c' }, { a: 'd' }] } }, defaultResp)
-    );
-    assert.throws(parseQuery.bind({ sort_by: undefined }), Error);
+    const mergeResult = obj => _.merge({}, defaultResp, obj);
+
+
+    it('option q(query as a json) is parsed correctly', function () {
+      const date = new Date();
+      assert.deepEqual(
+        parseQuery({ q: `{"a": "b", "b": 1, "c": "${date.toString()}", "d": "oid:000000000000000000000000"}` }),
+        mergeResult({ q: { a: 'b', b: 1, c: date.toString(), d: '000000000000000000000000' } })
+      );
+      assert.throws(parseQuery.bind(this, { q: '{a: "a"'}), Error);
+    });
+    it('option t (type) is parsed correctly', function() {
+      assert.deepEqual(
+        parseQuery({ t: 'count' }),
+        mergeResult({ t: 'count' })
+      );
+    });
+    it('option p(populate) is parsed correctly', function() {
+      assert.deepEqual(
+        parseQuery({ p: 'a' }),
+        mergeResult({ p: 'a' })
+      );
+      assert.deepEqual(
+        parseQuery({ p: '["a","b"]' }),
+        mergeResult({ p: ['a', 'b'] })
+      );
+      assert.deepEqual(
+        parseQuery({ p: '{"a":"b"}' }),
+        mergeResult({ p: { a: 'b' } })
+      );
+      assert.deepEqual(
+        parseQuery({ p: 'a,b' }),
+        mergeResult({ p: ['a', 'b'] })
+      );
+    });
+
+
+    it('values are parsed correctly without option', function() {
+      assert.deepEqual(
+        parseQuery({ id: '000000000000000000000000' }),
+        mergeResult({ q: {id: '000000000000000000000000'}})
+      );
+      assert.deepEqual(
+        parseQuery({ id: '00000000000000000000000' }),
+        mergeResult({ q: {id: 0} })
+      );
+      assert.deepEqual(
+        parseQuery({ q: '{"id":"000000000000000000000000"}' }),
+        mergeResult({ q: {id: '000000000000000000000000'}})
+      );
+
+      const date = new Date();
+      assert.deepEqual(
+        parseQuery({ time: `${date.toString()}`}),
+        mergeResult({ q: {time: date.toString() }})
+      );
+    });
+    it('option l(limit) is parsed correctly', function() {
+      assert.deepEqual(
+        parseQuery({ l: '101' }),
+        mergeResult({ l: 101 })
+      );
+      assert.deepEqual(
+        parseQuery({ limit: '101' }),
+        mergeResult({ l: 101 })
+      );
+      assert.deepEqual(
+        parseQuery({ skips: '101' }),
+        mergeResult({ sk: 101 })
+      );
+    });
+    it('invalid keys thrown an error', function() {
+      assert.throws(parseQuery.bind(this, { $1: 'a' }), Error);
+      assert.throws(parseQuery.bind(this, { sort_by: undefined }), Error);
+    });
+    it('value operators is parsed properly', function() {
+      assert.deepEqual(
+        parseQuery({ a: '{in}a,b' }),
+        mergeResult({ q: { a: { $in: ['a', 'b'] } } })
+      );
+      assert.deepEqual(
+        parseQuery({ a: '{m}k,v' }),
+        mergeResult({ q: { a: { $elemMatch: { k: 'v' } } } })
+      );
+      assert.deepEqual(
+        parseQuery({ a: '{empty}' }),
+        mergeResult({ q: { $or: [{ a: '' }, { a: { $exists: false } }] } })
+      );
+      assert.deepEqual(
+        parseQuery({ a: '{!empty}' }),
+        mergeResult({ q: { $nor: [{ a: '' }, { a: { $exists: false } }] } })
+      );
+      assert.deepEqual(
+        parseQuery({ a: 'b|c|d' }),
+        mergeResult({ q: { $or: [{ a: 'b' }, { a: 'c' }, { a: 'd' }] } })
+      );
+      assert.deepEqual(
+        parseQuery({ a: '/a/' }),
+        mergeResult({ q: { a: /a/}})
+      );
+      assert.deepEqual(
+        parseQuery({ a: '/a/i' }),
+        mergeResult({ q: { a: /a/i}})
+      );
+    });
   });
 });
-describe.skip('Query:apitests', function () {
+describe('Query:apitests', function () {
   let _id;
 
   const docCount = 4000;
@@ -466,7 +497,7 @@ describe.skip('Query:apitests', function () {
     });
   });
   it('oid wildcard', function (done) {
-    const req = { q: '{"_id": "oid:57ae125aaf1b792c1768982b"}' };
+    const req = { q: '{"_id": "57ae125aaf1b792c1768982b"}' };
     TestModel.query(req, function (error, data) {
       assert.equal(error, undefined);
       const validateData = (obj) => {
