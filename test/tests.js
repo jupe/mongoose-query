@@ -80,10 +80,10 @@ describe('unittests', function () {
     it('option q(query as a json) is parsed correctly', function () {
       const date = new Date();
       assert.deepEqual(
-        parseQuery({ q: `{"a": "b", "b": 1, "c": "${date.toString()}", "d": "oid:000000000000000000000000"}` }),
+        parseQuery({ q: `{"a": "b", "b": 1, "c": "${date.toISOString()}", "d": "oid:000000000000000000000000"}` }),
         mergeResult({
           q: {
-            a: 'b', b: 1, c: date.toString(), d: '000000000000000000000000'
+            a: 'b', b: 1, c: date, d: '000000000000000000000000'
           }
         })
       );
@@ -147,8 +147,8 @@ describe('unittests', function () {
 
       const date = new Date();
       assert.deepEqual(
-        parseQuery({ time: `${date.toString()}` }),
-        mergeResult({ q: { time: date.toString() } })
+        parseQuery({ time: `${date.toISOString()}` }),
+        mergeResult({ q: { time: date } })
       );
     });
     it('option l(limit) is parsed correctly', function () {
@@ -202,7 +202,10 @@ describe('unittests', function () {
   });
 });
 describe('Query:apitests', function () {
-  let _id;
+  let origTestDocId;
+  const _id = '57ae125aaf1b792c1768982b';
+  let firstDate;
+  let lastDate;
 
   const docCount = 4000;
   const defaultLimit = 1000;
@@ -210,15 +213,17 @@ describe('Query:apitests', function () {
   const create = (i, max, callback) => {
     if (i < max - 1) {
       const obj = new TestModel({
-        title: (i % 2 === 0 ? 'testa' : 'testb'), msg: `i#${i}`, orig: _id, i, arr: [{ ay: `i#${i}` }]
+        title: (i % 2 === 0 ? 'testa' : 'testb'), msg: `i#${i}`, orig: origTestDocId, i, arr: [{ ay: `i#${i}` }]
       });
       obj.save(() => {
+        if (!firstDate) firstDate = obj.date;
         create(i + 1, max, callback);
       });
     } else {
       const obj = new TestModel({
-        _id: '57ae125aaf1b792c1768982b', title: (i % 2 === 0 ? 'testa' : 'testb'), msg: `i#${i}`, orig: _id, i
+        _id, title: (i % 2 === 0 ? 'testa' : 'testb'), msg: `i#${i}`, orig: origTestDocId, i
       });
+      lastDate = obj.date;
       obj.save(callback);
     }
   };
@@ -232,7 +237,8 @@ describe('Query:apitests', function () {
     this.timeout(10000);
     const obj = new OrigTestModel();
     obj.save((error, doc) => {
-      _id = _.get(doc, '_id');
+      assert.equal(error, undefined);
+      origTestDocId = doc._id;
       TestModel.remove({}, () => {
         create(0, docCount, done);
       });
@@ -265,6 +271,14 @@ describe('Query:apitests', function () {
       const promise = TestModel.query(req);
       assertPromise(promise);
       promise.then(validateData).then(done);
+    });
+  });
+  it('findOne using objectid', function (done) {
+    const req = { _id, t: 'findOne' };
+    TestModel.query(req, function (error, data) {
+      assert.equal(error, undefined);
+      assert.equal(data._id, _id);
+      done();
     });
   });
   it('regex', function (done) {
@@ -517,12 +531,12 @@ describe('Query:apitests', function () {
     });
   });
   it('oid wildcard', function (done) {
-    const req = { q: '{"_id": "57ae125aaf1b792c1768982b"}' };
+    const req = { q: `{"_id": "${_id}"}` };
     TestModel.query(req, function (error, data) {
       assert.equal(error, undefined);
       const validateData = (obj) => {
         assert.equal(obj.length, 1);
-        assert.equal(obj[0]._id, '57ae125aaf1b792c1768982b');
+        assert.equal(obj[0]._id, `${_id}`);
       };
       validateData(data);
       // this is not supported when no callback is used
@@ -586,6 +600,14 @@ describe('Query:apitests', function () {
   it('aggregate', function () {
     const req = {
       q: JSON.stringify([
+        {
+          $match: {
+            date: {
+              $gt: firstDate.toString(),
+              $lte: lastDate.toString()
+            }
+          }
+        },
         {
           $group: {
             _id: '$title'
