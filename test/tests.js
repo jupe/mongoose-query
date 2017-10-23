@@ -5,7 +5,7 @@ const _ = require('lodash');
 const mongoose = require('mongoose');
 const chai = require('chai');
 
-const { Schema, Types } = mongoose;
+const { Schema } = mongoose;
 const { assert, expect } = chai;
 
 /* QueryPlugin itself */
@@ -81,17 +81,21 @@ describe('unittests', function () {
       const date = new Date();
       assert.deepEqual(
         parseQuery({ q: `{"a": "b", "b": 1, "c": "${date.toString()}", "d": "oid:000000000000000000000000"}` }),
-        mergeResult({ q: { a: 'b', b: 1, c: date.toString(), d: '000000000000000000000000' } })
+        mergeResult({
+          q: {
+            a: 'b', b: 1, c: date.toString(), d: '000000000000000000000000'
+          }
+        })
       );
-      assert.throws(parseQuery.bind(this, { q: '{a: "a"'}), Error);
+      assert.throws(parseQuery.bind(this, { q: '{a: "a"' }), Error);
     });
-    it('option t (type) is parsed correctly', function() {
+    it('option t (type) is parsed correctly', function () {
       assert.deepEqual(
         parseQuery({ t: 'count' }),
         mergeResult({ t: 'count' })
       );
     });
-    it('option p(populate) is parsed correctly', function() {
+    it('option p(populate) is parsed correctly', function () {
       assert.deepEqual(
         parseQuery({ p: 'a' }),
         mergeResult({ p: 'a' })
@@ -111,27 +115,27 @@ describe('unittests', function () {
     });
 
 
-    it('values are parsed correctly without option', function() {
+    it('values are parsed correctly without option', function () {
       assert.deepEqual(
         parseQuery({ id: '000000000000000000000000' }),
-        mergeResult({ q: {id: '000000000000000000000000'}})
+        mergeResult({ q: { id: '000000000000000000000000' } })
       );
       assert.deepEqual(
         parseQuery({ id: '00000000000000000000000' }),
-        mergeResult({ q: {id: 0} })
+        mergeResult({ q: { id: 0 } })
       );
       assert.deepEqual(
         parseQuery({ q: '{"id":"000000000000000000000000"}' }),
-        mergeResult({ q: {id: '000000000000000000000000'}})
+        mergeResult({ q: { id: '000000000000000000000000' } })
       );
 
       const date = new Date();
       assert.deepEqual(
-        parseQuery({ time: `${date.toString()}`}),
-        mergeResult({ q: {time: date.toString() }})
+        parseQuery({ time: `${date.toString()}` }),
+        mergeResult({ q: { time: date.toString() } })
       );
     });
-    it('option l(limit) is parsed correctly', function() {
+    it('option l(limit) is parsed correctly', function () {
       assert.deepEqual(
         parseQuery({ l: '101' }),
         mergeResult({ l: 101 })
@@ -145,11 +149,11 @@ describe('unittests', function () {
         mergeResult({ sk: 101 })
       );
     });
-    it('invalid keys thrown an error', function() {
+    it('invalid keys thrown an error', function () {
       assert.throws(parseQuery.bind(this, { $1: 'a' }), Error);
       assert.throws(parseQuery.bind(this, { sort_by: undefined }), Error);
     });
-    it('value operators is parsed properly', function() {
+    it('value operators is parsed properly', function () {
       assert.deepEqual(
         parseQuery({ a: '{in}a,b' }),
         mergeResult({ q: { a: { $in: ['a', 'b'] } } })
@@ -172,11 +176,11 @@ describe('unittests', function () {
       );
       assert.deepEqual(
         parseQuery({ a: '/a/' }),
-        mergeResult({ q: { a: /a/}})
+        mergeResult({ q: { a: /a/ } })
       );
       assert.deepEqual(
         parseQuery({ a: '/a/i' }),
-        mergeResult({ q: { a: /a/i}})
+        mergeResult({ q: { a: /a/i } })
       );
     });
   });
