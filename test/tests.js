@@ -87,6 +87,18 @@ describe('unittests', function () {
           }
         })
       );
+
+      const aggregate = [
+        { $match: {
+            _id: '000000000000000000000000'
+        }},
+        { $group: {
+            _id: "$_id",
+            balance: { $sum: "$records.amount"  }
+        }}
+      ];
+      const q = JSON.stringify(aggregate);
+      assert.deepEqual({q, type: 'aggregate'}, {q: q, type: 'aggregate'});
       assert.throws(parseQuery.bind(this, { q: '{a: "a"' }), Error);
     });
     it('option t (type) is parsed correctly', function () {
@@ -567,4 +579,19 @@ describe('Query:apitests', function () {
       done();
     });
   });
+  it('aggregate', function () {
+    const req = {
+      q: JSON.stringify([
+        {$match: {} },
+        {$group: {
+          _id: "$title",
+        }},
+        {$limit: 4}
+      ]),
+      t: 'aggregate'
+    };
+    return TestModel.query(req).then((data) => {
+      assert.deepEqual(data, [{_id: 'testb'}, {_id: 'testa'}])
+    });
+  })
 });
