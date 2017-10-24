@@ -32,8 +32,7 @@
     "eslint-plugin-mocha": "^4.11.0",
     "eslint-plugin-node": "^5.2.0",
     "eslint-plugin-promise": "^3.6.0",
-    "mocha": "^4.0.1",
-    "request": "*"
+    "mocha": "^4.0.1"
   },
   "contributors": [
     "Jussi Vatjus-Anttila <jussiva@gmail.com>"
