@@ -21,6 +21,7 @@
   "dependencies": {
     "flat": "*",
     "lodash": "*",
+    "moment": "^2.22.1",
     "mongoose": "^5.0.8"
   },
   "devDependencies": {
