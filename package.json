@@ -21,7 +21,7 @@
   "dependencies": {
     "flat": "*",
     "lodash": "*",
-    "mongoose": "^5.0.8"
+    "mongoose": "^5.1.1"
   },
   "devDependencies": {
     "chai": "*",
