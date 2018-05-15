@@ -20,7 +20,7 @@
   "license": "MIT",
   "dependencies": {
     "flat": "*",
-    "lodash": "*",
+    "lodash": ">=4.17.9",
     "mongoose": "^5.1.1"
   },
   "devDependencies": {
