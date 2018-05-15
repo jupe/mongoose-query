@@ -230,8 +230,7 @@ describe('Query:apitests', function () {
   };
 
   before(function (done) {
-    const useMongoClient = true;
-    mongoose.connect('mongodb://localhost/mongoose-query-tests', { useMongoClient });
+    mongoose.connect('mongodb://localhost/mongoose-query-tests');
     mongoose.connection.on('connected', done);
   });
   before(function (done) {
