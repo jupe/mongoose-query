@@ -20,9 +20,9 @@
   "license": "MIT",
   "dependencies": {
     "flat": "*",
-    "lodash": "*",
+    "lodash": ">=4.17.9",
     "moment": "^2.22.1",
-    "mongoose": "^5.0.8"
+    "mongoose": "^5.1.1"
   },
   "devDependencies": {
     "chai": "*",
