@@ -53,12 +53,15 @@ describe('unittests', function () {
       assert.isNaN(parseDateCustom('2011A1020'));
       assert.isNaN(parseDateCustom(''));
       assert.isNaN(parseDateCustom());
+      assert.isNaN(parseDateCustom('test-yannick-2'));
+      assert.isNaN(parseDateCustom('Thue May 15 2018 23:15:16 GMT+0300 (EEST)'));
     });
     it('is valid', function () {
       assert.isTrue(_.isDate(parseDateCustom('2017/09/10')));
-      assert.isTrue(_.isDate(parseDateCustom('31/2/2010')));
+      assert.isTrue(_.isDate(parseDateCustom('31/3/2010')));
       assert.isTrue(_.isDate(parseDateCustom('2011-10-10T14:48:00'))); // ISO 8601 with time
       assert.isTrue(_.isDate(parseDateCustom('2011-10-10'))); // ISO 8601
+      assert.isTrue(_.isDate(parseDateCustom('Tue May 15 2018 23:15:16 GMT+0300 (EEST)'))); // Date.toString() -fmt
     });
   });
   describe('parseQuery', function () {
