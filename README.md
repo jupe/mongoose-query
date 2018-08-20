@@ -107,7 +107,9 @@ Special values:
 Alternative search conditions:
 "key={i}a"                  case insensitive
 "key={e}a"                  ends with a
+"key={ei}a"                 ends with a, case insensitive
 "key={b}a"                  begins with a
+"key={bi}a"                 begins with a, case insensitive
 "key={in}a,b"               At least one of these is in array
 "key={nin}a,b"              Any of these values is not in array
 "key={all}a,b"              All of these contains in array
