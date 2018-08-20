@@ -6,7 +6,7 @@
     "query",
     "mongodb"
   ],
-  "version": "0.5.2",
+  "version": "0.5.3",
   "homepage": "https://github.com/jupe/mongoose-query",
   "author": "Jussi Vatjus-Anttila <jussiva@gmail.com>)",
   "main": "lib/index",
