@@ -43,11 +43,6 @@ defaults: &defaults
     - restore_cache:
         key: dependency-cache-{{ checksum "_tmp_file" }}-{{ checksum "package-lock.json" }}
     - run:
-        name: versions
-        command: |
-          node --version
-          npm --version
-    - run:
         name: npm-install
         command: npm $NPM_CI_INSTALL
 
