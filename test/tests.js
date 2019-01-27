@@ -168,6 +168,36 @@ describe('unittests', function () {
         mergeResult({ sk: 101 })
       );
     });
+    it('option d(allowDiskUse)', function () {
+      assert.deepEqual(
+        parseQuery({ d: 'true' }),
+        mergeResult({ options: { allowDiskUse: true } })
+      );
+      assert.deepEqual(
+        parseQuery({ allowDiskUse: 'true' }),
+        mergeResult({ options: { allowDiskUse: true } })
+      );
+    });
+    it('option to(timeout)', function () {
+      assert.deepEqual(
+        parseQuery({ to: '1' }),
+        mergeResult({ options: { maxTimeMS: 1 } })
+      );
+      assert.deepEqual(
+        parseQuery({ timeout: '2' }),
+        mergeResult({ options: { maxTimeMS: 2 } })
+      );
+    });
+    it('option x(explain)', function () {
+      assert.deepEqual(
+        parseQuery({ x: 'asd' }),
+        mergeResult({ options: { explain: 'queryPlanner' } })
+      );
+      assert.deepEqual(
+        parseQuery({ explain: 'executionStats' }),
+        mergeResult({ options: { explain: 'executionStats' } })
+      );
+    });
     it('invalid keys thrown an error', function () {
       assert.throws(parseQuery.bind(this, { $1: 'a' }), Error);
       assert.throws(parseQuery.bind(this, { sort_by: undefined }), Error);
@@ -273,6 +303,32 @@ describe('Query:apitests', function () {
       assertPromise(promise);
       promise.then(validateData).then(done);
     });
+  });
+  it('find with timeout', function (done) {
+    const req = { to: 100 };
+    TestModel.query(req, function (error, data) {
+      assert.equal(error, undefined);
+
+      const validateData = (obj) => {
+        assert.equal(obj.length, defaultLimit);
+        assert.isTrue((`${obj[0].orig}`).match(/([0-9a-z]{24})/) != null);
+        _.each(obj, (doc) => {
+          assert.isTrue(!_.isPlainObject(doc));
+        });
+      };
+      validateData(data);
+      // alternative:
+      const promise = TestModel.query(req);
+      assertPromise(promise);
+      promise.then(validateData).then(done);
+    });
+  });
+  it('find with explain', function () {
+    const req = { x: 'default' };
+    return TestModel.query(req)
+        .then((doc) => {
+          assert.isTrue(_.isPlainObject(doc[0]));
+        });
   });
   it('findOne using objectid', function (done) {
     const req = { _id, t: 'findOne' };
