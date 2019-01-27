@@ -41,13 +41,13 @@ defaults: &defaults
     - checkout
     - run: node --version > _tmp_file
     - restore_cache:
-        key: dependency-cache-{{ checksum "_tmp_file" }}-{{ checksum "package-lock.json" }}
+        key: dependency-cache-{{ checksum "_tmp_file" }}-{{ checksum "package.json" }}
     - run:
         name: npm-install
         command: npm $NPM_CI_INSTALL
 
     - save_cache:
-        key: dependency-cache-{{ checksum "_tmp_file" }}-{{ checksum "package-lock.json" }}
+        key: dependency-cache-{{ checksum "_tmp_file" }}-{{ checksum "package.json" }}
         paths:
           - ./node_modules
     - run:
@@ -56,13 +56,13 @@ defaults: &defaults
         environment:
           REPORTER: mocha-circleci-reporter
           MOCHA_FILE: junit/test-results.xml
-    - run:
-        name: coveralls
-        command: cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
-    - run:
-        name: lint
-        command: npm run lint
-        when: always
+    #- run:
+    #    name: coveralls
+    #    command: cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+    #- run:
+    #    name: lint
+    #    command: npm run lint
+    #    when: always
     - store_test_results:
         path: junit
     - store_artifacts:
