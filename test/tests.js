@@ -686,7 +686,7 @@ describe('Query:apitests', function () {
       t: 'mapReduce'
     };
     return TestModel.query(req).then((data) => {
-      assert.deepEqual(data.results, [{ _id: 'testb', value: 11 }, { _id: 'testa', value: 11 }]);
+      assert.deepEqual(data.results, [{ _id: 'testa', value: 11 }, { _id: 'testb', value: 11 }]);
     });
   });
 });
