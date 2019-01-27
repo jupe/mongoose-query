@@ -62,7 +62,6 @@ schema.plugin( QueryPlugin(, <options>) )
 ```
 optional `options`:
 * `logger`: custom logger, e.g. winston logger, default: "dummy logger"
-* `allowEval`: <boolean> Allow to use eval or not, default: true
 * `includeAllParams`: <boolean> Parse also other values. e.g. `?name=me`. default: true
 * `ignoreKeys` : <array{String}> keys to be ignored. Default: []
 
@@ -90,6 +89,9 @@ sk=<num results to skip>    specify the number of results to skip in the result 
                             useful for paging
 l=<limit>                   specify the limit for the number of results (default is 1000)
 p=<populate>                specify the fields for populate, also more complex json object is supported.
+x=<explain>                 allowed values: 'queryPlanner', 'executionStats', 'allPlansExecution'
+to=<ms>                     timeout for query
+d=<boolean>                 allowDiskUse (for heavy queries)
 map=<mapFunction>           mongodb map function as string
                             http://docs.mongodb.org/manual/reference/command/mapReduce/#mapreduce-map-cmd'
                             e.g. "function(){if (this.status == 'A') emit(this.cust_id, 1);)}"
