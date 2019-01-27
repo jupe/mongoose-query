@@ -75,7 +75,8 @@ describe('unittests', function () {
       sk: false,
       l: 1000,
       p: false,
-      fl: false
+      fl: false,
+      options: {}
     };
     const mergeResult = obj => _.merge({}, defaultResp, obj);
 
