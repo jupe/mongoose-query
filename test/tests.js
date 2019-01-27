@@ -231,9 +231,8 @@ describe('Query:apitests', function () {
     }
   };
 
-  before(function (done) {
-    mongoose.connect('mongodb://localhost/mongoose-query-tests');
-    mongoose.connection.on('connected', done);
+  before(function () {
+    return mongoose.connect('mongodb://localhost/mongoose-query-tests', { useNewUrlParser: true });
   });
   before(function (done) {
     this.timeout(10000);
@@ -241,19 +240,19 @@ describe('Query:apitests', function () {
     obj.save((error, doc) => {
       assert.equal(error, undefined);
       origTestDocId = doc._id;
-      TestModel.remove({}, () => {
+      TestModel.deleteMany({}, () => {
         create(0, docCount, done);
       });
     });
   });
-  after(function (done) {
-    OrigTestModel.remove({}, done);
+  after(function () {
+    return OrigTestModel.deleteMany({});
   });
-  after(function (done) {
-    TestModel.remove({}, done);
+  after(function () {
+    return TestModel.deleteMany({});
   });
-  after(function (done) {
-    mongoose.disconnect(done);
+  after(function () {
+    return mongoose.disconnect();
   });
 
   it('find', function (done) {
