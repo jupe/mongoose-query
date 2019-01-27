@@ -52,7 +52,7 @@ defaults: &defaults
           - ./node_modules
     - run:
         name: test
-        command: npm run coverage
+        command: npm test
         environment:
           REPORTER: mocha-circleci-reporter
           MOCHA_FILE: junit/test-results.xml
@@ -67,11 +67,11 @@ defaults: &defaults
         path: junit
     - store_artifacts:
         path: junit
-    - store_artifacts:
-        path: coverage
-        prefix: coverage
-    - store_test_results:
-        path: coverage/coverage.json
+    #- store_artifacts:
+    #    path: coverage
+    #    prefix: coverage
+    #- store_test_results:
+    #    path: coverage/coverage.json
 jobs:
   test-node6:
     <<: *defaults
