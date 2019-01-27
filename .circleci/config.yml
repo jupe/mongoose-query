@@ -59,10 +59,10 @@ defaults: &defaults
     #- run:
     #    name: coveralls
     #    command: cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
-    #- run:
-    #    name: lint
-    #    command: npm run lint
-    #    when: always
+    - run:
+        name: lint
+        command: npm run lint
+        when: always
     - store_test_results:
         path: junit
     - store_artifacts:
