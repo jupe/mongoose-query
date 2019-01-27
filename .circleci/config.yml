@@ -44,7 +44,7 @@ defaults: &defaults
         key: dependency-cache-{{ checksum "_tmp_file" }}-{{ checksum "package.json" }}
     - run:
         name: npm-install
-        command: npm $NPM_CI_INSTALL
+        command: npm install
 
     - save_cache:
         key: dependency-cache-{{ checksum "_tmp_file" }}-{{ checksum "package.json" }}
@@ -79,7 +79,6 @@ jobs:
     - image: circleci/node:6.14.4-browsers
       environment:
        CHROME_BIN: "/usr/bin/google-chrome"
-       NPM_CI_INSTALL: "install"
     - image: mongo:4.1.2
   test-node8:
     <<: *defaults
@@ -87,7 +86,6 @@ jobs:
     - image: circleci/node:8.12.0-browsers
       environment:
        CHROME_BIN: "/usr/bin/google-chrome"
-       NPM_CI_INSTALL: "ci"
     - image: mongo:4.1.2
   test-node10:
     <<: *defaults
@@ -95,7 +93,6 @@ jobs:
     - image: circleci/node:10.14.1-browsers
       environment:
         CHROME_BIN: "/usr/bin/google-chrome"
-        NPM_CI_INSTALL: "ci"
     - image: mongo:4.1.2
   test-node-latest:
     <<: *defaults
@@ -103,7 +100,6 @@ jobs:
     - image: circleci/node:latest-browsers
       environment:
        CHROME_BIN: "/usr/bin/google-chrome"
-       NPM_CI_INSTALL: "ci"
     - image: mongo:4.1.2
   publish:
     <<: *defaults
@@ -111,7 +107,7 @@ jobs:
       - checkout
       - run: node --version > _tmp_file
       - restore_cache:
-          key: dependency-cache-{{ checksum "_tmp_file" }}-{{ checksum "package-lock.json" }}
+          key: dependency-cache-{{ checksum "_tmp_file" }}-{{ checksum "package.json" }}
       - run:
           name: Authenticate with registry
           command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
