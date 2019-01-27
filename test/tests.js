@@ -327,9 +327,9 @@ describe('Query:apitests', function () {
   it('find with explain', function () {
     const req = { x: 'default' };
     return TestModel.query(req)
-        .then((doc) => {
-          assert.isTrue(_.isPlainObject(doc[0]));
-        });
+      .then((doc) => {
+        assert.isTrue(_.isPlainObject(doc[0]));
+      });
   });
   it('findOne using objectid', function (done) {
     const req = { _id, t: 'findOne' };
@@ -676,6 +676,17 @@ describe('Query:apitests', function () {
     };
     return TestModel.query(req).then((data) => {
       assert.deepEqual(data, [{ _id: 'testb' }, { _id: 'testa' }]);
+    });
+  });
+
+  it('mapReduce', function () {
+    const req = {
+      map: 'function () { emit(this.title, 1) }',
+      reduce: 'function (k, vals) { return 11 }',
+      t: 'mapReduce'
+    };
+    return TestModel.query(req).then((data) => {
+      assert.deepEqual(data.results, [{ _id: 'testb', value: 11 }, { _id: 'testa', value: 11 }]);
     });
   });
 });
