@@ -25,7 +25,7 @@
     "mongoose": "^5.2.13"
   },
   "devDependencies": {
-    "chai": "*",
+    "chai": "^4.2.0",
     "eslint": "^5.0.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-chai-expect": "^2.0.1",
