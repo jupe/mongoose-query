@@ -136,8 +136,8 @@ Results with `fl=false`:
 [
  {
  	nest: {
- 		ed: {
- 			data: 'value',
+ 	  ed: {
+ 	    data: 'value',
       data2':'value'
     }
   }
