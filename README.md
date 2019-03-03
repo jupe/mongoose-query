@@ -130,7 +130,7 @@ Alternative search conditions:
 **References to mongo:**
 - [elemMatch](https://docs.mongodb.com/manual/reference/operator/query/elemMatch/)
 - [size](https://docs.mongodb.com/manual/reference/operator/query/size/)
-
+```
 Results with `fl=false`:
 ```
 [
@@ -138,9 +138,9 @@ Results with `fl=false`:
  	nest: {
  		ed: {
  			data: 'value',
-        	data2':'value'
-    	}
-  	}
+      data2':'value'
+    }
+  }
 }
 ]
 ```
