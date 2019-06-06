@@ -80,16 +80,16 @@ describe('unittests', function () {
     };
     const mergeResult = obj => _.merge({}, defaultResp, obj);
 
-    it('objectid is parsed correctly from q', function () {
+    it('objectid is parsed correctly from q', function () {
       assert.deepEqual(
-          parseQuery({q: JSON.stringify({"fieldName":"oid:000000000000000000000000"})}),
-          mergeResult({q: {fieldName: new Types.ObjectId('000000000000000000000000')}})
+        parseQuery({ q: JSON.stringify({ fieldName: 'oid:000000000000000000000000' }) }),
+        mergeResult({ q: { fieldName: new Types.ObjectId('000000000000000000000000') } })
       );
     });
-    it('objectid is parsed correctly from parameter', function () {
+    it('objectid is parsed correctly from parameter', function () {
       assert.deepEqual(
-          parseQuery({"fieldName":"oid:000000000000000000000000"}),
-          mergeResult({q: {fieldName: new Types.ObjectId('000000000000000000000000')}})
+        parseQuery({ fieldName: 'oid:000000000000000000000000' }),
+        mergeResult({ q: { fieldName: new Types.ObjectId('000000000000000000000000') } })
       );
     });
     it('option q(query as a json) is parsed correctly', function () {
