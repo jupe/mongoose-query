@@ -5,7 +5,7 @@ const _ = require('lodash');
 const mongoose = require('mongoose');
 const chai = require('chai');
 
-const { Schema } = mongoose;
+const { Schema, Types } = mongoose;
 const { assert, expect } = chai;
 
 /* QueryPlugin itself */
@@ -80,14 +80,38 @@ describe('unittests', function () {
     };
     const mergeResult = obj => _.merge({}, defaultResp, obj);
 
+    it('objectid is parsed correctly from q', function () {
+      assert.deepEqual(
+        parseQuery({ q: JSON.stringify({ fieldName: 'oid:000000000000000000000000' }) }),
+        mergeResult({ q: { fieldName: new Types.ObjectId('000000000000000000000000') } })
+      );
+    });
+    it('objectid is parsed correctly from $match', function () {
+      assert.deepEqual(
+        parseQuery({ q: JSON.stringify({ $match: { fieldName: 'oid:000000000000000000000000' } }) }),
+        mergeResult({
+          q: {
+            $match: {
+              fieldName: new Types.ObjectId('000000000000000000000000')
+            }
+          }
+        })
+      );
+    });
 
+    it('objectid is parsed correctly from parameter', function () {
+      assert.deepEqual(
+        parseQuery({ fieldName: 'oid:000000000000000000000000' }),
+        mergeResult({ q: { fieldName: new Types.ObjectId('000000000000000000000000') } })
+      );
+    });
     it('option q(query as a json) is parsed correctly', function () {
       const date = new Date();
       assert.deepEqual(
         parseQuery({ q: `{"a": "b", "b": 1, "c": "${date.toISOString()}", "d": "oid:000000000000000000000000"}` }),
         mergeResult({
           q: {
-            a: 'b', b: 1, c: date, d: '000000000000000000000000'
+            a: 'b', b: 1, c: date, d: new Types.ObjectId('000000000000000000000000')
           }
         })
       );

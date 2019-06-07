@@ -19,9 +19,9 @@
   },
   "license": "MIT",
   "dependencies": {
-    "flat": "*",
-    "lodash": ">=4.17.9",
-    "moment": "^2.22.1",
+    "flat": "^4.1.0",
+    "lodash": "^4.17.11",
+    "moment": "^2.24.0",
     "mongoose": "^5.5.12"
   },
   "devDependencies": {
