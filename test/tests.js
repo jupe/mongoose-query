@@ -86,6 +86,19 @@ describe('unittests', function () {
         mergeResult({ q: { fieldName: new Types.ObjectId('000000000000000000000000') } })
       );
     });
+    it('objectid is parsed correctly from $match', function () {
+      assert.deepEqual(
+        parseQuery({ q: JSON.stringify({ $match: { fieldName: 'oid:000000000000000000000000' } }) }),
+        mergeResult({
+          q: {
+            $match: {
+              fieldName: new Types.ObjectId('000000000000000000000000')
+            }
+          }
+        })
+      );
+    });
+
     it('objectid is parsed correctly from parameter', function () {
       assert.deepEqual(
         parseQuery({ fieldName: 'oid:000000000000000000000000' }),
