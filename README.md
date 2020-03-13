@@ -1,6 +1,6 @@
 # mongoose-query
 [![Build Status](https://travis-ci.org/jupe/mongoose-query.png?branch=master)](https://travis-ci.org/jupe/mongoose-query)
-[![Greenkeeper badge](https://badges.greenkeeper.io/jupe/mongoose-query.svg)](https://greenkeeper.io/)
+
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 <br>
 [![License badge](https://img.shields.io/badge/license-MIT-blue.svg)](https://img.shields.io)
