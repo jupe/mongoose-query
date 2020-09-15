@@ -20,7 +20,7 @@ model.find({group: "users"}).select("name").skip(1).limit(5).populate('name')
 ```
 
 ### Tested with node.js versions
-6.x, 7.x, 8.x, LTS, latest release
+8.x, 10.x, 12.x,latest release
 
 ## Changes log
 

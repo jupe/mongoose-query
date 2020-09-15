@@ -4,10 +4,6 @@ workflows:
   version: 2
   test-publish:
     jobs:
-      - test-node6:
-          filters:  # required since `deploy` has tag filters AND requires `build`
-            tags:
-              only: /.*/
       - test-node8:
           filters:  # required since `deploy` has tag filters AND requires `build`
             tags:
@@ -22,7 +18,6 @@ workflows:
               only: /.*/
       - publish:
           requires:
-            - test-node6
             - test-node8
             - test-node10
             - test-node-latest
@@ -36,7 +31,7 @@ workflows:
 defaults: &defaults
   working_directory: ~/repo
   docker:
-  - image: circleci/node:6.11.4
+  - image: circleci/node:8.12.0
   steps:
     - checkout
     - run: node --version > _tmp_file
@@ -73,13 +68,6 @@ defaults: &defaults
     #- store_test_results:
     #    path: coverage/coverage.json
 jobs:
-  test-node6:
-    <<: *defaults
-    docker:
-    - image: circleci/node:6.14.4-browsers
-      environment:
-       CHROME_BIN: "/usr/bin/google-chrome"
-    - image: mongo:4.1.2
   test-node8:
     <<: *defaults
     docker:
