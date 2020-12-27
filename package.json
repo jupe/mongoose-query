@@ -22,7 +22,8 @@
     "flat": "^5.0.0",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
-    "mongoose": "^5.9.4"
+    "mongoose": "^5.9.4",
+    "snyk": "^1.316.1"
   },
   "devDependencies": {
     "chai": "^4.2.0",
@@ -40,6 +41,9 @@
   ],
   "scripts": {
     "test": "mocha -R list",
-    "lint": "./node_modules/eslint/bin/eslint.js ."
-  }
+    "lint": "./node_modules/eslint/bin/eslint.js .",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
+  },
+  "snyk": true
 }
