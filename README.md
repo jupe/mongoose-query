@@ -1,12 +1,9 @@
 # mongoose-query
 [![Build Status](https://travis-ci.org/jupe/mongoose-query.png?branch=master)](https://travis-ci.org/jupe/mongoose-query)
-
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
-<br>
 [![License badge](https://img.shields.io/badge/license-MIT-blue.svg)](https://img.shields.io)
 [![release](http://github-release-version.herokuapp.com/github/jupe/mongoose-query/release.svg?style=flat)](https://github.com/jupe/mongoose-query/releases/latest)
 [![npm version](https://badge.fury.io/js/mongoose-query.svg)](https://badge.fury.io/js/mongoose-query)
-<br/>
 [![Stars badge](https://img.shields.io/github/stars/jupe/mongoose-query.svg)](https://img.shields.io)
 
 This library is usefull example with `expressjs` + `mongoose` applications to help construct mongoose query model directly from url parameters. Example:
@@ -20,7 +17,7 @@ model.find({group: "users"}).select("name").skip(1).limit(5).populate('name')
 ```
 
 ### Tested with node.js versions
-10.x, 12.x, 14.x,latest release
+12.x, 14.x, 16.x,latest release
 
 ## Changes log
 
