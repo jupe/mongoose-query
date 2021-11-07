@@ -109,6 +109,9 @@ jobs:
       - restore_cache:
           key: dependency-cache-{{ checksum "_tmp_file" }}-{{ checksum "package.json" }}
       - run:
+          name: install dependencies
+          command: npm ci
+      - run:
           name: Authenticate with registry
           command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
       - run:
