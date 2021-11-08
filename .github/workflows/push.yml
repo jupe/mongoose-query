@@ -19,6 +19,18 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: mrdivyansh/eslint-action@1.0.7
+        # GITHUB_TOKEN in forked repositories is read-only
+        # https://help.github.com/en/actions/reference/events-that-trigger-workflows#pull-request-event-pull_request
+        if: ${{ github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository }} 
+        with:
+          repo-token: ${{secrets.GITHUB_TOKEN}}
+          eslint-rc: .eslintrc.js
+          execute-on-files:
+            ./lib
   test:
     runs-on: ubuntu-latest
     strategy:
@@ -43,8 +55,6 @@ jobs:
       run: npm test
     #- name: coveralls
     #  run: cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
-    - name: lint
-      run: npm run lint
     - name: Test Report
       uses: dorny/test-reporter@v1
       if: success() || failure()    # run this step even if previous step failed
