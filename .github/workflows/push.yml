@@ -1,0 +1,59 @@
+name: push
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+     paths-ignore:
+      - '**/*.md'
+  release:
+    types:
+      - created
+env:
+  CHROME_BIN: "/usr/bin/google-chrome"
+  NODE_ENV: test
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x, 14.x, 16.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - name: install dependencies
+      run: npm ci
+    - name: run unit tests
+      env:
+        REPORTER: mocha-circleci-reporter
+        MOCHA_FILE: junit/test-results.xml
+      run: npm test
+    - name: coveralls
+      run: cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+    - name: lint
+      run: |
+        npm run lint
+    - name: Test Report
+      uses: dorny/test-reporter@v1
+      if: success() || failure()    # run this step even if previous step failed
+      with:
+        # Name of the check run which will be created
+        name: Unit Test report ${{ matrix.node-version }}
+        path: junit/test-results.json
+        reporter: mocha-json
+    - name: Authenticate with registry
+      if: github.event_name == 'release'
+      run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
+    - name: Publish package
+      run: npm publish
