@@ -34,16 +34,17 @@ jobs:
         cache: 'npm'
     - name: install dependencies
       run: npm ci
+    - name: Create mongoDB Docker container
+      run: sudo docker run -d -p 27017:27017 mongo:4.4.10-focal
     - name: run unit tests
       env:
         REPORTER: mocha-circleci-reporter
         MOCHA_FILE: junit/test-results.xml
       run: npm test
-    - name: coveralls
-      run: cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+    #- name: coveralls
+    #  run: cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
     - name: lint
-      run: |
-        npm run lint
+      run: npm run lint
     - name: Test Report
       uses: dorny/test-reporter@v1
       if: success() || failure()    # run this step even if previous step failed
