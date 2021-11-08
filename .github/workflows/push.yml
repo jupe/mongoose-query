@@ -22,15 +22,8 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: mrdivyansh/eslint-action@1.0.7
-        # GITHUB_TOKEN in forked repositories is read-only
-        # https://help.github.com/en/actions/reference/events-that-trigger-workflows#pull-request-event-pull_request
-        if: ${{ github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository }} 
-        with:
-          repo-token: ${{secrets.GITHUB_TOKEN}}
-          eslint-rc: .eslintrc.js
-          execute-on-files:
-            ./lib
+      - uses: actions/checkout@v2
+      - uses: bradennapier/eslint-plus-action@v3.4.2
   test:
     runs-on: ubuntu-latest
     strategy:
@@ -47,7 +40,16 @@ jobs:
     - name: install dependencies
       run: npm ci
     - name: Create mongoDB Docker container
-      run: sudo docker run -d -p 27017:27017 mongo:4.4.10-focal
+      run: |
+        sudo docker run -d -p 27017:27017 mongo:4.4.10-focal
+        : ${MONGO_HOST:=localhost}
+        : ${MONGO_PORT:=27017}
+
+        until nc -z $MONGO_HOST $MONGO_PORT
+        do
+            echo "Waiting for Mongo ($MONGO_HOST:$MONGO_PORT) to start..."
+            sleep 0.5
+        done
     - name: run unit tests
       env:
         REPORTER: mocha-circleci-reporter
