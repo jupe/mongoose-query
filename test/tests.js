@@ -489,6 +489,16 @@ describe('Query:apitests', function () {
       done();
     });
   });
+  it('distinct with timeout', function (done) {
+    const req = { f: 'title', t: 'distinct', to: 10000 };
+    TestModel.query(req, function (error, data) {
+      assert.equal(error, undefined);
+      assert.equal(data.length, 2);
+      // alternative
+      assertPromise(TestModel.query(req));
+      done();
+    });
+  });
   it('flatten', function (done) {
     const req = { q: '{}', fl: 'true', l: '1' };
     TestModel.query(req, function (error, data) {
