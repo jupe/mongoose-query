@@ -22,7 +22,7 @@
     "flat": "^5.0.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
-    "mongoose": "^5.13.14",
+    "mongoose": "^6.4.6",
     "snyk": "^1.316.1"
   },
   "devDependencies": {
