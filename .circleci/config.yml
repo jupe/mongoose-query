@@ -76,21 +76,21 @@ jobs:
   test-node12:
     <<: *defaults
     docker:
-    - image: circleci/node:10.14.1-browsers
+    - image: circleci/node:12-browsers
       environment:
        CHROME_BIN: "/usr/bin/google-chrome"
     - image: mongo:4.1.2
   test-node14:
     <<: *defaults
     docker:
-    - image: circleci/node:12-browsers
+    - image: circleci/node:14-browsers
       environment:
         CHROME_BIN: "/usr/bin/google-chrome"
     - image: mongo:4.1.2
   test-node16:
     <<: *defaults
     docker:
-    - image: circleci/node:14-browsers
+    - image: circleci/node:16-browsers
       environment:
         CHROME_BIN: "/usr/bin/google-chrome"
     - image: mongo:4.1.2
