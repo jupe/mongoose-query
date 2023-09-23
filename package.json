@@ -23,7 +23,7 @@
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "mongoose": "^5.13.14",
-    "snyk": "^1.996.0"
+    "snyk": "^1.1064.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",
