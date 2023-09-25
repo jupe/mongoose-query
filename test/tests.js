@@ -82,8 +82,8 @@ describe('unittests', function () {
 
     it('text search is parsed correctly from q', function () {
       assert.deepEqual(
-        parseQuery({ q: JSON.stringify({ $text: {$search: '100-10-7' }}) }),
-        mergeResult({ q: { $text: {$search: '100-10-7' }} })
+        parseQuery({ q: JSON.stringify({ $text: { $search: '100-10-7' } }) }),
+        mergeResult({ q: { $text: { $search: '100-10-7' } } })
       );
     });
 
