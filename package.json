@@ -6,7 +6,7 @@
     "query",
     "mongodb"
   ],
-  "version": "0.7.4",
+  "version": "0.7.5",
   "homepage": "https://github.com/jupe/mongoose-query",
   "author": "Jussi Vatjus-Anttila <jussiva@gmail.com>)",
   "main": "lib/index",
@@ -23,7 +23,7 @@
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "mongoose": "^5.13.14",
-    "snyk": "^1.996.0"
+    "snyk": "^1.1064.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",

@@ -80,6 +80,13 @@ describe('unittests', function () {
     };
     const mergeResult = obj => _.merge({}, defaultResp, obj);
 
+    it('text search is parsed correctly from q', function () {
+      assert.deepEqual(
+        parseQuery({ q: JSON.stringify({ $text: { $search: '100-10-7' } }) }),
+        mergeResult({ q: { $text: { $search: '100-10-7' } } })
+      );
+    });
+
     it('objectid is parsed correctly from q', function () {
       assert.deepEqual(
         parseQuery({ q: JSON.stringify({ fieldName: 'oid:000000000000000000000000' }) }),
