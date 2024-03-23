@@ -1,0 +1,72 @@
+name: push
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+     paths-ignore:
+      - '**/*.md'
+  release:
+    types:
+      - created
+env:
+  CHROME_BIN: "/usr/bin/google-chrome"
+  NODE_ENV: test
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: bradennapier/eslint-plus-action@v3.4.2
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x, 14.x, 16.x, 18.x, 20.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - name: install dependencies
+      run: npm ci
+    - name: Create mongoDB Docker container
+      run: |
+        sudo docker run -d -p 27017:27017 mongo:4.4.10-focal
+        : ${MONGO_HOST:=localhost}
+        : ${MONGO_PORT:=27017}
+
+        until nc -z $MONGO_HOST $MONGO_PORT
+        do
+            echo "Waiting for Mongo ($MONGO_HOST:$MONGO_PORT) to start..."
+            sleep 0.5
+        done
+    - name: run unit tests
+      env:
+        REPORTER: mocha-circleci-reporter
+        MOCHA_FILE: junit/test-results.xml
+      run: npm test
+    #- name: coveralls
+    #  run: cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+    - name: Test Report
+      uses: dorny/test-reporter@v1
+      if: success() || failure()    # run this step even if previous step failed
+      with:
+        # Name of the check run which will be created
+        name: Unit Test report ${{ matrix.node-version }}
+        path: junit/test-results.json
+        reporter: mocha-json
+    - name: Authenticate with registry
+      if: github.event_name == 'release'
+      run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
+    - name: Publish package
+      run: npm publish
