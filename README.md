@@ -77,7 +77,7 @@ http://www.myserver.com/query?[q=<query>][&t=<type>][&f=<fields>][&s=<order>][&s
 
 q=<query>                   restrict results by the specified JSON query
                             regex e.g. q='{"field":{"$regex":"/mygrep/", "$options":"i"}}'
-t=<type>                    find|findOne|count|aggregate|distinct|aggregate|mapReduce
+t=<type>                    find|findOne|count|estimateCount|aggregate|distinct|aggregate|mapReduce
 f=<set of fields>           specify the set of fields to include or exclude in each document
                             (1 - include; 0 - exclude)
 s=<sort order>              specify the order in which to sort each specified field

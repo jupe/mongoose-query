@@ -485,6 +485,13 @@ describe('Query:apitests', function () {
       promise.then(validateData).then(done);
     });
   });
+  it('estimateCount', function (done) {
+    const req = { t: 'estimateCount' };
+    TestModel.query(req, function (error, { count }) {
+      assert.equal(count, 4000);
+      done();
+    });
+  });
 
   it('distinct', function (done) {
     const req = { f: 'title', t: 'distinct' };
