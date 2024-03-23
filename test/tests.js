@@ -487,7 +487,7 @@ describe('Query:apitests', function () {
   });
   it('estimateCount', function (done) {
     const req = { t: 'estimateCount' };
-    TestModel.query(req, function (error, {count}) {
+    TestModel.query(req, function (error, { count }) {
       assert.equal(count, 4000);
       done();
     });
