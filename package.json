@@ -40,7 +40,7 @@
     "Jussi Vatjus-Anttila <jussiva@gmail.com>"
   ],
   "scripts": {
-    "test": "mocha -R list",
+    "test": "mocha",
     "lint": "./node_modules/eslint/bin/eslint.js .",
     "snyk-protect": "snyk protect",
     "prepublish": "npm run snyk-protect"
